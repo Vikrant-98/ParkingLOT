@@ -1,0 +1,12 @@
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\bin\Debug\netstandard2.0\RepositoryLAyer.deps.json
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\bin\Debug\netstandard2.0\RepositoryLAyer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLAyer.csprojAssemblyReference.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLAyer.csproj.CoreCompileInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLAyer.AssemblyInfoInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLAyer.AssemblyInfo.cs
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\bin\Debug\netstandard2.0\RepositoryLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\bin\Debug\netstandard2.0\CommonLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\bin\Debug\netstandard2.0\CommonLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLayer.csproj.CopyComplete
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\RepositoryLAyer\obj\Debug\netstandard2.0\RepositoryLayer.pdb
