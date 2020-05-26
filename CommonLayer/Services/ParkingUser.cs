@@ -21,7 +21,7 @@ namespace CommonLayer.Services
         [RegularExpression(@"^[A-Z]{1}[a-z]{2}[a-z]*$", ErrorMessage = "Enter Valid Last Name")]
         public string LastName { get; set; }
         [Required]
-        [RegularExpression(@"^([a-zA-Z0-9]*[.]*[a-zA-Z0-9]*@[a-zA-Z0-9]*.{1}[a-zA-Z0-9]*[.]*[a-zA-Z0-9]*)$", ErrorMessage = "Enter Valid Email")]
+        [RegularExpression(@"^([a-zA-Z0-9]{2}[a-zA-Z0-9]*[.]{0,1}[a-zA-Z0-9]*@[a-zA-Z0-9]*.{1}[a-zA-Z0-9]*[.]*[a-zA-Z0-9]*)$", ErrorMessage = "Enter Valid Email")]
         public string MailID { get; set; }
         [Required(ErrorMessage = "DriverCategory Is Required")]
         [MaxLength(50)]
@@ -34,4 +34,22 @@ namespace CommonLayer.Services
         
         public DateTime ModifiedDate { get; set; }
     }
+    public class EncryptedPassword
+    {
+        public static string EncodePasswordToBase64(string Password)
+        {
+            try
+            {
+                byte[] encData_byte = new byte[Password.Length];
+                encData_byte = Encoding.UTF8.GetBytes(Password);
+                string encodedData = Convert.ToBase64String(encData_byte);
+                return encodedData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error in base64Encode" + ex.Message);
+            }
+        }
+    }
+    
 }
