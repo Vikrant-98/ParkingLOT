@@ -14,12 +14,33 @@ namespace BusinessLayer.Services
         {
             Parking = data;
         }
-        public bool ParkingLoginDatails(ParkingUser Info)
+        public bool ParkingRegisterDatails(ParkingUser Info)
+        {
+            try
+            {
+                string Encrypted = Info.Password;
+                Info.Password = EncryptedPassword.EncodePasswordToBase64(Encrypted);
+                var Result = Parking.ParkingRegisterDatails(Info);
+                if (!Result.Equals(null))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public bool ParkingLoginDatails(Login Info)
         {
             try
             {
                 var Result = Parking.ParkingLoginDatails(Info);
-                if (!Result.Equals(null))
+                if (Result == true)
                 {
                     return true;
                 }

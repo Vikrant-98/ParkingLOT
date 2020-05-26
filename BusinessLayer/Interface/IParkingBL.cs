@@ -7,6 +7,8 @@ namespace BusinessLayer.Interface
 {
     public interface IParkingBL
     {
-        bool ParkingLoginDatails(ParkingUser Info);
+        bool ParkingRegisterDatails(ParkingUser Info);
+
+        bool ParkingLoginDatails(Login Info);
     }
 }
