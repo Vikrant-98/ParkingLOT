@@ -10,8 +10,8 @@ using RepositoryLAyer.ApplicationDB;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(Application))]
-    [Migration("20200525133328_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200525153354_firstmigration")]
+    partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

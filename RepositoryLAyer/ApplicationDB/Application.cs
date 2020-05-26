@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RepositoryLAyer.ApplicationDB
 {
@@ -12,7 +14,9 @@ namespace RepositoryLAyer.ApplicationDB
         {
         }
 
-        public DbSet<ParkingUser> Logins { get; set; }
-
+        public DbSet<ParkingUser> Users { get; set; }
+        
     }
-}
+
+}  
+

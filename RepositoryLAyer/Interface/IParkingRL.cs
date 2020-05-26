@@ -7,6 +7,8 @@ namespace RepositoryLAyer.Interface
 {
     public interface IParkingRL
     {
-        bool ParkingLoginDatails(ParkingUser Info);
+        bool ParkingRegisterDatails(ParkingUser Info);
+
+        bool ParkingLoginDatails(Login Info);
     }
 }
