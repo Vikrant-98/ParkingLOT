@@ -1,0 +1,14 @@
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingBusinesLayer.deps.json
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingBusinesLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingBusinesLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingCommonLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingReposLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingCommonLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\bin\Debug\netcoreapp2.1\ParkingReposLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.csprojAssemblyReference.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.csproj.CoreCompileInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.AssemblyInfoInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.AssemblyInfo.cs
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.csproj.CopyComplete
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingBusinesLayer\obj\Debug\netcoreapp2.1\ParkingBusinesLayer.pdb
