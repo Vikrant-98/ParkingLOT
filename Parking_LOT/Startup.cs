@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessLayer.Interface;
-using BusinessLayer.Services;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using RepositoryLAyer.ApplicationDB;
-using RepositoryLAyer.Interface;
-using RepositoryLAyer.Services;
+using Microsoft.IdentityModel.Tokens;
+using ParkingBusinesLayer.Interface;
+using ParkingBusinesLayer.Service;
+using ParkingReposLayer.ApplicationDB;
+using ParkingReposLayer.Interface;
+using ParkingReposLayer.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Parking_LOT
 {
@@ -31,6 +28,7 @@ namespace Parking_LOT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Dependency Injection from Business layer and repos layer
             services.AddTransient<IParkingBL, ParkingBL>();
             services.AddTransient<IParkingRL, ParkingRL>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -40,6 +38,22 @@ namespace Parking_LOT
             item.UseSqlServer(Configuration.GetConnectionString("myconn"))
 
             );
+            //Genetate token for user login
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var serverSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:key"]));
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = serverSecret,
+                        ValidIssuer = Configuration["JWT:Issuer"],
+                        ValidAudience = Configuration["JWT:Audience"]
+                    };
+                });
+            services.AddSwaggerGen( c => 
+                {
+                    c.SwaggerDoc("v1", new Info {Title ="Core API" ,Description="Swagger Core API"});
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +70,10 @@ namespace Parking_LOT
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API"); }
+                );
         }
     }
 }

@@ -3013,6 +3013,53 @@
           }
         }
       },
+      "Swashbuckle.AspNetCore.Swagger/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "1.0.4",
+          "Microsoft.AspNetCore.Mvc.Formatters.Json": "1.0.4",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.Swagger.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.Swagger.dll": {}
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerGen/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.ApiExplorer": "1.0.4",
+          "Microsoft.AspNetCore.Mvc.Core": "1.0.4",
+          "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.4",
+          "NETStandard.Library": "1.6.1",
+          "Swashbuckle.AspNetCore.Swagger": "2.1.0",
+          "System.Xml.XPath": "4.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerUI/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Routing": "1.0.4",
+          "Microsoft.AspNetCore.StaticFiles": "1.0.4",
+          "Microsoft.Extensions.FileProviders.Embedded": "1.0.1",
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerUI.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerUI.dll": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4590,7 +4637,7 @@
           "System.Xml.ReaderWriter": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Xml.XPath.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.dll": {}
@@ -4616,49 +4663,47 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "BusinessLayer/1.0.0": {
+      "ParkingBusinesLayer/1.0.0": {
         "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
+        "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
-          "CommonLayer": "1.0.0",
+          "ParkingCommonLayer": "1.0.0",
+          "ParkingReposLayer": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ParkingBusinesLayer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ParkingBusinesLayer.dll": {}
+        }
+      },
+      "ParkingCommonLayer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.1",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.1.14",
+          "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14"
+        },
+        "compile": {
+          "bin/placeholder/ParkingCommonLayer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ParkingCommonLayer.dll": {}
+        }
+      },
+      "ParkingReposLayer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.1",
+        "dependencies": {
           "Microsoft.EntityFrameworkCore": "2.1.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14",
-          "RepositoryLayer": "1.0.0"
+          "ParkingCommonLayer": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/BusinessLayer.dll": {}
+          "bin/placeholder/ParkingReposLayer.dll": {}
         },
         "runtime": {
-          "bin/placeholder/BusinessLayer.dll": {}
-        }
-      },
-      "CommonLayer/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "2.1.14",
-          "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14"
-        },
-        "compile": {
-          "bin/placeholder/CommonLayer.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/CommonLayer.dll": {}
-        }
-      },
-      "RepositoryLayer/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
-        "dependencies": {
-          "CommonLayer": "1.0.0",
-          "Microsoft.EntityFrameworkCore": "2.1.14",
-          "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14"
-        },
-        "compile": {
-          "bin/placeholder/RepositoryLayer.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/RepositoryLayer.dll": {}
+          "bin/placeholder/ParkingReposLayer.dll": {}
         }
       }
     }
@@ -8048,6 +8093,51 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "Swashbuckle.AspNetCore.Swagger/2.1.0": {
+      "sha512": "eDMfiK7bjqxVq/IOhpQ2OY8NqpqP0qMyUWvOGo4ZjMBVmMHi8fwc/BdrlpgdWsnyuvH+wKXAOIf9vBbBjtWAJw==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.swagger/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net451/Swashbuckle.AspNetCore.Swagger.dll",
+        "lib/net451/Swashbuckle.AspNetCore.Swagger.xml",
+        "lib/netstandard1.6/Swashbuckle.AspNetCore.Swagger.dll",
+        "lib/netstandard1.6/Swashbuckle.AspNetCore.Swagger.xml",
+        "swashbuckle.aspnetcore.swagger.2.1.0.nupkg.sha512",
+        "swashbuckle.aspnetcore.swagger.nuspec"
+      ]
+    },
+    "Swashbuckle.AspNetCore.SwaggerGen/2.1.0": {
+      "sha512": "6uyl1ixsetE3b2mP4PzD/kAeZkXTqDjeYLOHY9Scoe7B/UDWYuNIWUoK9Iu/vp/61YsVrwZFddxoZ10Mo9eYFg==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.swaggergen/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net451/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "lib/net451/Swashbuckle.AspNetCore.SwaggerGen.xml",
+        "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerGen.xml",
+        "swashbuckle.aspnetcore.swaggergen.2.1.0.nupkg.sha512",
+        "swashbuckle.aspnetcore.swaggergen.nuspec"
+      ]
+    },
+    "Swashbuckle.AspNetCore.SwaggerUI/2.1.0": {
+      "sha512": "ZujlbO4jWAXAh95zpe8egBt0AueWM2ZtHylYRKLxmZXwaGfBQN2qim/BJahG5R1k6N2dIRgDaBT2rKDq8XdUMw==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.swaggerui/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net451/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "lib/net451/Swashbuckle.AspNetCore.SwaggerUI.xml",
+        "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerUI.xml",
+        "swashbuckle.aspnetcore.swaggerui.2.1.0.nupkg.sha512",
+        "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -12585,33 +12675,35 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
-    "BusinessLayer/1.0.0": {
+    "ParkingBusinesLayer/1.0.0": {
       "type": "project",
-      "path": "../BusinessLayer/BusinessLayer.csproj",
-      "msbuildProject": "../BusinessLayer/BusinessLayer.csproj"
+      "path": "../ParkingBusinesLayer/ParkingBusinesLayer.csproj",
+      "msbuildProject": "../ParkingBusinesLayer/ParkingBusinesLayer.csproj"
     },
-    "CommonLayer/1.0.0": {
+    "ParkingCommonLayer/1.0.0": {
       "type": "project",
-      "path": "../CommonLayer/CommonLayer.csproj",
-      "msbuildProject": "../CommonLayer/CommonLayer.csproj"
+      "path": "../ParkingCommonLayer/ParkingCommonLayer.csproj",
+      "msbuildProject": "../ParkingCommonLayer/ParkingCommonLayer.csproj"
     },
-    "RepositoryLayer/1.0.0": {
+    "ParkingReposLayer/1.0.0": {
       "type": "project",
-      "path": "../RepositoryLAyer/RepositoryLayer.csproj",
-      "msbuildProject": "../RepositoryLAyer/RepositoryLayer.csproj"
+      "path": "../ParkingReposLayer/ParkingReposLayer.csproj",
+      "msbuildProject": "../ParkingReposLayer/ParkingReposLayer.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
-      "BusinessLayer >= 1.0.0",
-      "CommonLayer >= 1.0.0",
       "Microsoft.AspNetCore.App >= 2.1.1",
       "Microsoft.AspNetCore.Razor.Design >= 2.1.2",
       "Microsoft.EntityFrameworkCore >= 2.1.14",
       "Microsoft.EntityFrameworkCore.SqlServer >= 2.1.14",
       "Microsoft.NETCore.App >= 2.1.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.1.9",
-      "RepositoryLayer >= 1.0.0"
+      "ParkingBusinesLayer >= 1.0.0",
+      "ParkingCommonLayer >= 1.0.0",
+      "ParkingReposLayer >= 1.0.0",
+      "Swashbuckle.AspNetCore.SwaggerGen >= 2.1.0",
+      "Swashbuckle.AspNetCore.SwaggerUI >= 2.1.0"
     ]
   },
   "packageFolders": {
@@ -12644,14 +12736,14 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\BusinessLayer\\BusinessLayer.csproj": {
-              "projectPath": "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\BusinessLayer\\BusinessLayer.csproj"
+            "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\ParkingBusinesLayer\\ParkingBusinesLayer.csproj": {
+              "projectPath": "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\ParkingBusinesLayer\\ParkingBusinesLayer.csproj"
             },
-            "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\CommonLayer\\CommonLayer.csproj": {
-              "projectPath": "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\CommonLayer\\CommonLayer.csproj"
+            "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\ParkingCommonLayer\\ParkingCommonLayer.csproj": {
+              "projectPath": "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\ParkingCommonLayer\\ParkingCommonLayer.csproj"
             },
-            "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\RepositoryLAyer\\RepositoryLayer.csproj": {
-              "projectPath": "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\RepositoryLAyer\\RepositoryLayer.csproj"
+            "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\ParkingReposLayer\\ParkingReposLayer.csproj": {
+              "projectPath": "C:\\Users\\The Daddy\\source\\repos\\Parking_LOT\\ParkingReposLayer\\ParkingReposLayer.csproj"
             }
           }
         }
@@ -12692,6 +12784,14 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[2.1.9, )"
+          },
+          "Swashbuckle.AspNetCore.SwaggerGen": {
+            "target": "Package",
+            "version": "[2.1.0, )"
+          },
+          "Swashbuckle.AspNetCore.SwaggerUI": {
+            "target": "Package",
+            "version": "[2.1.0, )"
           }
         },
         "imports": [

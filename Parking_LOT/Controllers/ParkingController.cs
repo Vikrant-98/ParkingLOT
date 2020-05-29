@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessLayer.Interface;
-using CommonLayer.Services;
-using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using RepositoryLAyer.ApplicationDB;
+using Microsoft.IdentityModel.Tokens;
+using ParkingBusinesLayer.Interface;
+using ParkingCommonLayer.Services;
 
 namespace Parking_LOT.Controllers
 {
@@ -15,67 +15,99 @@ namespace Parking_LOT.Controllers
     [ApiController]
     public class ParkingController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-        private Application dBContext;
-        IParkingBL BusinessLayer;
+        /// <summary>
+        /// Dependenct Injection from Business layer 
+        /// </summary>
+        readonly IParkingBL _BusinessLayer;
+        private readonly IConfiguration _configuration;
 
-        public ParkingController(IParkingBL BusinessDependencyInjection, IConfiguration configuration, Application dBContext)
+        public ParkingController(IParkingBL _BusinessDependencyInjection, IConfiguration _configuration)
         {
-            BusinessLayer = BusinessDependencyInjection;
-            this.configuration = configuration;
-            this.dBContext = dBContext;
+            _BusinessLayer = _BusinessDependencyInjection;
+            this._configuration = _configuration;
         }
        
         [Route("Register")]
         [HttpPost]
-        public IActionResult ParkingLOTDetails([FromBody]ParkingUser Info)
+        public IActionResult RegisterUser([FromBody]ParkingUser Info)
         {
             try
             {
                 
-                bool data = BusinessLayer.ParkingRegisterDatails(Info);
+                bool data = _BusinessLayer.Addparking(Info);                    //accept the result form Repos layer
                 if (!data.Equals(null))
                 {
                     var status = true;
-                    var Message = "Register Succesfull";
-                    return this.Ok(new { status, Message });
+                    var Message = "Register Successfull";
+                    return Ok(new {
+                        status,
+                        Message,
+                        Info.ID,
+                        Info.FirstName,
+                        Info.LastName,
+                        Info.MailID,
+                        Info.DriverCategory,
+                        Info.CreateDate,
+                        Info.ModifiedDate
+                    });                                                             //data return indexer SMD format when Register success
                 }
                 else
                 {
                     var status = false;
                     var Message = "Register Failed";
-                    return this.BadRequest(new { status, Message });
+                    return this.BadRequest(new { status, Message});
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { error = e.Message });
+                var status = false;
+                var Message = "Register Failed";
+                return BadRequest(new { status , error = e.Message , Message });
             }
         }
         [Route("Login")]
         [HttpPost]
-        public IActionResult ParkingLoginDetails([FromBody]Login Info)
+        public IActionResult LoginUser([FromBody]Login Info)
         {
             try
             {
 
-                bool data = BusinessLayer.ParkingLoginDatails(Info);
+                bool data = _BusinessLayer.LoginVerification(Info);                 //data return indexer SMD format
+                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Role, Info.ToString()),
+                    new Claim("UserName", Info.MailID.ToString()),
+                    new Claim("Password", Info.Password.ToString())
+                };
+                var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+                    _configuration["Jwt:Issuer"],
+                    claims,
+                    expires: DateTime.Now.AddHours(120),
+                    signingCredentials: signingCreds);                                      //Token Generate for User Category
+
                 if (data == true)
                 {
                     var status = true;
                     var Message = "Login successful ";
-                    return this.Ok(new { status, Message });
+                    var Token = new JwtSecurityTokenHandler().WriteToken(token);
+                    return Ok(new { status,Info.MailID, Message, Token });                  //SMD for Login Success 
                 }
                 else
                 {
                     var status = false;
                     var Message = "Login Failed";
-                    return this.BadRequest(new { status, Message });
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { error = e.Message });
+                var status = false;
+                var Message = "Login Failed";
+                return BadRequest(new { status , error = e.Message , Message });
             }
         }
     }

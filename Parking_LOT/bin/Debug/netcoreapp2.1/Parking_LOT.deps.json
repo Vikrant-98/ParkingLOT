@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "8bd00d8fd3a2bb226e43978cb66de611fa10be32"
+    "signature": "38d19a1b6ff0b56484c8d059c94a92febdf6082f"
   },
   "compilationOptions": {
     "defines": [
@@ -24,15 +24,17 @@
     ".NETCoreApp,Version=v2.1": {
       "Parking_LOT/1.0.0": {
         "dependencies": {
-          "BusinessLayer": "1.0.0",
-          "CommonLayer": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.1",
           "Microsoft.AspNetCore.Razor.Design": "2.1.2",
           "Microsoft.EntityFrameworkCore": "2.1.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14",
           "Microsoft.NETCore.App": "2.1.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.9",
-          "RepositoryLayer": "1.0.0"
+          "ParkingBusinesLayer": "1.0.0",
+          "ParkingCommonLayer": "1.0.0",
+          "ParkingReposLayer": "1.0.0",
+          "Swashbuckle.AspNetCore.SwaggerGen": "2.1.0",
+          "Swashbuckle.AspNetCore.SwaggerUI": "2.1.0"
         },
         "runtime": {
           "Parking_LOT.dll": {}
@@ -469,6 +471,59 @@
           "lib/netstandard1.0/Remotion.Linq.dll": {}
         }
       },
+      "Swashbuckle.AspNetCore.Swagger/2.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.1.1",
+          "Microsoft.AspNetCore.Mvc.Formatters.Json": "2.1.1",
+          "NETStandard.Library": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.Swagger.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.Swagger.dll": {}
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerGen/2.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.ApiExplorer": "2.1.1",
+          "Microsoft.AspNetCore.Mvc.Core": "2.1.1",
+          "Microsoft.AspNetCore.Mvc.DataAnnotations": "2.1.1",
+          "NETStandard.Library": "2.0.3",
+          "Swashbuckle.AspNetCore.Swagger": "2.1.0",
+          "System.Xml.XPath": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerGen.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerUI/2.1.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Routing": "2.1.1",
+          "Microsoft.AspNetCore.StaticFiles": "2.1.1",
+          "Microsoft.Extensions.FileProviders.Embedded": "2.1.1",
+          "NETStandard.Library": "2.0.3",
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerUI.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.6/Swashbuckle.AspNetCore.SwaggerUI.dll": {}
+        }
+      },
       "System.Collections.Immutable/1.5.0": {},
       "System.Composition/1.0.31": {
         "dependencies": {
@@ -644,43 +699,41 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "BusinessLayer/1.0.0": {
+      "ParkingBusinesLayer/1.0.0": {
         "dependencies": {
-          "CommonLayer": "1.0.0",
+          "ParkingCommonLayer": "1.0.0",
+          "ParkingReposLayer": "1.0.0"
+        },
+        "runtime": {
+          "ParkingBusinesLayer.dll": {}
+        },
+        "compile": {
+          "ParkingBusinesLayer.dll": {}
+        }
+      },
+      "ParkingCommonLayer/1.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.1.14",
+          "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14"
+        },
+        "runtime": {
+          "ParkingCommonLayer.dll": {}
+        },
+        "compile": {
+          "ParkingCommonLayer.dll": {}
+        }
+      },
+      "ParkingReposLayer/1.0.0": {
+        "dependencies": {
           "Microsoft.EntityFrameworkCore": "2.1.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14",
-          "RepositoryLayer": "1.0.0"
+          "ParkingCommonLayer": "1.0.0"
         },
         "runtime": {
-          "BusinessLayer.dll": {}
+          "ParkingReposLayer.dll": {}
         },
         "compile": {
-          "BusinessLayer.dll": {}
-        }
-      },
-      "CommonLayer/1.0.0": {
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "2.1.14",
-          "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14"
-        },
-        "runtime": {
-          "CommonLayer.dll": {}
-        },
-        "compile": {
-          "CommonLayer.dll": {}
-        }
-      },
-      "RepositoryLayer/1.0.0": {
-        "dependencies": {
-          "CommonLayer": "1.0.0",
-          "Microsoft.EntityFrameworkCore": "2.1.14",
-          "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14"
-        },
-        "runtime": {
-          "RepositoryLayer.dll": {}
-        },
-        "compile": {
-          "RepositoryLayer.dll": {}
+          "ParkingReposLayer.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -3713,6 +3766,27 @@
       "path": "remotion.linq/2.2.0",
       "hashPath": "remotion.linq.2.2.0.nupkg.sha512"
     },
+    "Swashbuckle.AspNetCore.Swagger/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eDMfiK7bjqxVq/IOhpQ2OY8NqpqP0qMyUWvOGo4ZjMBVmMHi8fwc/BdrlpgdWsnyuvH+wKXAOIf9vBbBjtWAJw==",
+      "path": "swashbuckle.aspnetcore.swagger/2.1.0",
+      "hashPath": "swashbuckle.aspnetcore.swagger.2.1.0.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.SwaggerGen/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6uyl1ixsetE3b2mP4PzD/kAeZkXTqDjeYLOHY9Scoe7B/UDWYuNIWUoK9Iu/vp/61YsVrwZFddxoZ10Mo9eYFg==",
+      "path": "swashbuckle.aspnetcore.swaggergen/2.1.0",
+      "hashPath": "swashbuckle.aspnetcore.swaggergen.2.1.0.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.SwaggerUI/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZujlbO4jWAXAh95zpe8egBt0AueWM2ZtHylYRKLxmZXwaGfBQN2qim/BJahG5R1k6N2dIRgDaBT2rKDq8XdUMw==",
+      "path": "swashbuckle.aspnetcore.swaggerui/2.1.0",
+      "hashPath": "swashbuckle.aspnetcore.swaggerui.2.1.0.nupkg.sha512"
+    },
     "System.Collections.Immutable/1.5.0": {
       "type": "package",
       "serviceable": true,
@@ -3790,17 +3864,17 @@
       "path": "system.linq.queryable/4.0.1",
       "hashPath": "system.linq.queryable.4.0.1.nupkg.sha512"
     },
-    "BusinessLayer/1.0.0": {
+    "ParkingBusinesLayer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "CommonLayer/1.0.0": {
+    "ParkingCommonLayer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "RepositoryLayer/1.0.0": {
+    "ParkingReposLayer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
