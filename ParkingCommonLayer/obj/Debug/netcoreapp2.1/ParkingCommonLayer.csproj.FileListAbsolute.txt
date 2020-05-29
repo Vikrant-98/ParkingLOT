@@ -1,0 +1,9 @@
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\bin\Debug\netcoreapp2.1\ParkingCommonLayer.deps.json
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\bin\Debug\netcoreapp2.1\ParkingCommonLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\obj\Debug\netcoreapp2.1\ParkingCommonLayer.csproj.CoreCompileInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\obj\Debug\netcoreapp2.1\ParkingCommonLayer.AssemblyInfoInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\obj\Debug\netcoreapp2.1\ParkingCommonLayer.AssemblyInfo.cs
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\bin\Debug\netcoreapp2.1\ParkingCommonLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\obj\Debug\netcoreapp2.1\ParkingCommonLayer.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\obj\Debug\netcoreapp2.1\ParkingCommonLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\ParkingCommonLayer\obj\Debug\netcoreapp2.1\ParkingCommonLayer.csprojAssemblyReference.cache
