@@ -64,8 +64,8 @@ namespace ParkingReposLayer.Services
             {
                 string MailID = Info.MailID;
                 string Password = EncryptedPassword.EncodePasswordToBase64(Info.Password);          //Password Encrypted
-
-                var Result = dBContext.Users.Where(u => u.MailID == MailID && u.Password == Password).FirstOrDefault();
+                Driver DriverCategory = Info.DriverCategory;
+                var Result = dBContext.Users.Where(u => u.MailID == MailID && u.Password == Password && u.DriverCategory == DriverCategory).FirstOrDefault();
 
                 if (Result != null)
                 {

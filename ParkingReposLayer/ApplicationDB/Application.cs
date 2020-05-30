@@ -18,5 +18,7 @@ namespace ParkingReposLayer.ApplicationDB
 
         public DbSet<ParkingUser> Users { get; set; }
 
+        public DbSet<ParkingInformation> Entities { get; set; }
+
     }
 }
