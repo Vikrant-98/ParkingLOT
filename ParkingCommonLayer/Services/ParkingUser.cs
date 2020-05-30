@@ -30,7 +30,7 @@ namespace ParkingCommonLayer.Services
         [Required(ErrorMessage = "DriverCategory Is Required")]
         [MaxLength(50)]
         //Driver Categiry
-        public string DriverCategory { get; set; }
+        public Driver DriverCategory { get; set; }
         [Required(ErrorMessage = "Password Is Required")]
         [RegularExpression(@"^.{8,15}$", ErrorMessage = "Password Length should be between 8 to 15")]
         //Password
@@ -61,5 +61,17 @@ namespace ParkingCommonLayer.Services
                 throw new Exception("Error in base64Encode" + ex.Message);
             }
         }
+    }
+    public enum Driver
+    {
+        Owner,
+        Security,
+        Police,
+        Driver
+    }
+    public enum Parkingtype
+    {
+        Owner,
+        Vallet
     }
 }
