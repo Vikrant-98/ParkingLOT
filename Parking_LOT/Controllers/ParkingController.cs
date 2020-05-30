@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -79,7 +80,7 @@ namespace Parking_LOT.Controllers
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Role, Info.ToString()),
+                    new Claim(ClaimTypes.Role, Info.DriverCategory.ToString()),
                     new Claim("UserName", Info.MailID.ToString()),
                     new Claim("Password", Info.Password.ToString())
                 };
@@ -110,5 +111,54 @@ namespace Parking_LOT.Controllers
                 return BadRequest(new { status , error = e.Message , Message });
             }
         }
+        [Route("Driver")]
+        [HttpPost]
+        public IActionResult Driver([FromBody]ParkingUser Info)
+        {
+            try
+            {
+
+                bool data = _BusinessLayer.Addparking(Info);                    //accept the result form Repos layer
+                if (!data.Equals(null))
+                {
+                    var status = true;
+                    var Message = "Register Successfull";
+                    return Ok(new
+                    {
+                        status,
+                        Message,
+                        Info.ID,
+                        Info.FirstName,
+                        Info.LastName,
+                        Info.MailID,
+                        Info.DriverCategory,
+                        Info.CreateDate,
+                        Info.ModifiedDate
+                    });                                                             //data return indexer SMD format when Register success
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Register Failed";
+                    return this.BadRequest(new { status, Message });
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Register Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
+        }
+        //[HttpGet]
+        //[Authorize(Roles = "Owner,Police")]
+        //public ActionResult<List<ParkingUser>> AllUserData()
+        //{
+        //    bool success = true;
+        //    string message = "Successfully Added Record Data";
+        //    var data = userBL.AllUserData();
+        //    return Ok(new { success, message, data });
+        //    //return a;
+        //}
     }
 }
