@@ -14,5 +14,13 @@ namespace ParkingReposLayer.Interface
         bool Addparking(ParkingUser Info);
         //Login
         bool LoginVerification(Login Info);
+
+        bool ParkVehicle(ParkingInformation Info);
+
+        List<ParkingInformation> GetAllParkingData();
+
+        bool DeleteRecord(string VehicleNo);
+
+        bool UpdateRecord(ParkingInformation Info);
     }
 }
