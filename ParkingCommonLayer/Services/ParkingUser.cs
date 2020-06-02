@@ -30,7 +30,7 @@ namespace ParkingCommonLayer.Services
         [Required(ErrorMessage = "DriverCategory Is Required")]
         [MaxLength(50)]
         //Driver Categiry
-        public Driver DriverCategory { get; set; }
+        public string DriverCategory { get; set; }
         [Required(ErrorMessage = "Password Is Required")]
         [RegularExpression(@"^.{8,15}$", ErrorMessage = "Password Length should be between 8 to 15")]
         //Password

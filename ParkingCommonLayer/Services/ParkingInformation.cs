@@ -13,12 +13,10 @@ namespace ParkingCommonLayer.Services
         public int ParkingID { get; set; }
 
         public int ParkingSlotNo { get; set; }
-        [Required(ErrorMessage = "DriverCategory Is Required")]
-        [MaxLength(50)]
-        public Driver DriverCategory { get; set; }
+        
         [Required]
-        [RegularExpression(@"^[a-z]{2}[0-9]{2}[a-z]{1,2}[0-9]{4}$", ErrorMessage = "Enter Valid Email")]
-        public int VehicalNo { get; set; }
+        [RegularExpression(@"^[a-z||A-Z]{2}[ ]{1}[0-9]{2}[ ]{1}[a-z||A-Z]{1,2}[ ]{1}[0-9]{4}$", ErrorMessage = "Enter Valid Vehicle Number")]
+        public string VehicalNo { get; set; }
         [Required]
         public string VehicalBrand { get; set; }
         
@@ -29,7 +27,7 @@ namespace ParkingCommonLayer.Services
         public DateTime EntryTime { get; set; } = DateTime.Now;
 
         public DateTime ExitTime { get; set; }
-        [Required]
-        public Parkingtype ParkingType { get; set; }
+        
+        public string ParkingType { get; set; }
     }
 }
