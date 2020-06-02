@@ -111,54 +111,34 @@ namespace Parking_LOT.Controllers
                 return BadRequest(new { status , error = e.Message , Message });
             }
         }
-        [Route("Driver")]
+        [Route("ParkingDetails")]
         [HttpPost]
-        public IActionResult Driver([FromBody]ParkingUser Info)
+        public IActionResult ParkVehicle([FromBody]ParkingInformation Info)
         {
             try
             {
 
-                bool data = _BusinessLayer.Addparking(Info);                    //accept the result form Repos layer
-                if (!data.Equals(null))
+                bool data = _BusinessLayer.ParkVehicle(Info);                 //data return indexer SMD format
+                
+                if (data == true)
                 {
                     var status = true;
-                    var Message = "Register Successfull";
-                    return Ok(new
-                    {
-                        status,
-                        Message,
-                        Info.ID,
-                        Info.FirstName,
-                        Info.LastName,
-                        Info.MailID,
-                        Info.DriverCategory,
-                        Info.CreateDate,
-                        Info.ModifiedDate
-                    });                                                             //data return indexer SMD format when Register success
+                    var Message = "Login successful ";
+                    return Ok(new { status, Message, Info});                  //SMD for Login Success 
                 }
                 else
                 {
                     var status = false;
-                    var Message = "Register Failed";
-                    return this.BadRequest(new { status, Message });
+                    var Message = "Login Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
                 }
             }
             catch (Exception e)
             {
                 var status = false;
-                var Message = "Register Failed";
+                var Message = "Login Failed";
                 return BadRequest(new { status, error = e.Message, Message });
             }
         }
-        //[HttpGet]
-        //[Authorize(Roles = "Owner,Police")]
-        //public ActionResult<List<ParkingUser>> AllUserData()
-        //{
-        //    bool success = true;
-        //    string message = "Successfully Added Record Data";
-        //    var data = userBL.AllUserData();
-        //    return Ok(new { success, message, data });
-        //    //return a;
-        //}
     }
 }
