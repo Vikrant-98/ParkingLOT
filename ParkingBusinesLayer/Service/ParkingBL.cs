@@ -69,5 +69,67 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
+        public bool ParkVehicle(ParkingInformation Info)
+        {
+            try
+            {
+                var Result = Parking.ParkVehicle(Info);                               //get result true or false
+                if (Result == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public List<ParkingInformation> GetAllParkingData()
+        {
+            return Parking.GetAllParkingData();
+        }
+        public bool DeleteRecord(string VehicleNo)
+        {
+            try
+            {
+                var Result = Parking.DeleteRecord(VehicleNo);                               //get result true or false
+                if (Result == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public bool UpdateRecord(ParkingInformation Info)
+        {
+            try
+            {
+                var Result = Parking.UpdateRecord(Info);                               //get result true or false
+                if (Result == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }
