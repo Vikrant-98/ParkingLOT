@@ -1,9 +1,0 @@
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\bin\Debug\netstandard2.0\CommonLayer.deps.json
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\bin\Debug\netstandard2.0\CommonLayer.dll
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\obj\Debug\netstandard2.0\CommonLayer.csprojAssemblyReference.cache
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\obj\Debug\netstandard2.0\CommonLayer.csproj.CoreCompileInputs.cache
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\obj\Debug\netstandard2.0\CommonLayer.AssemblyInfoInputs.cache
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\obj\Debug\netstandard2.0\CommonLayer.AssemblyInfo.cs
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\bin\Debug\netstandard2.0\CommonLayer.pdb
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\obj\Debug\netstandard2.0\CommonLayer.dll
-C:\Users\The Daddy\source\repos\Parking_LOT\CommonLayer\obj\Debug\netstandard2.0\CommonLayer.pdb
