@@ -13,6 +13,8 @@ using ParkingReposLayer.ApplicationDB;
 using ParkingReposLayer.Interface;
 using ParkingReposLayer.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Parking_LOT
 {
@@ -28,6 +30,7 @@ namespace Parking_LOT
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             //Dependency Injection from Business layer and repos layer
             services.AddTransient<IParkingBL, ParkingBL>();
             services.AddTransient<IParkingRL, ParkingRL>();
@@ -38,6 +41,7 @@ namespace Parking_LOT
             item.UseSqlServer(Configuration.GetConnectionString("myconn"))
 
             );
+
             //Genetate token for user login
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -67,9 +71,10 @@ namespace Parking_LOT
             {
                 app.UseHsts();
             }
-
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+            
             app.UseSwagger();
             app.UseSwaggerUI(
                 c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API"); }

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ParkingBusinesLayer.Interface;
 using ParkingCommonLayer.Services;
+using ParkingReposLayer.ApplicationDB;
 
 namespace Parking_LOT.Controllers
 {
@@ -21,11 +22,13 @@ namespace Parking_LOT.Controllers
         /// </summary>
         readonly IParkingBL _BusinessLayer;
         private readonly IConfiguration _configuration;
+        private Application dBContext;
 
-        public ParkingController(IParkingBL _BusinessDependencyInjection, IConfiguration _configuration)
+        public ParkingController(IParkingBL _BusinessDependencyInjection, IConfiguration _configuration, Application dBContext)
         {
             _BusinessLayer = _BusinessDependencyInjection;
             this._configuration = _configuration;
+            this.dBContext = dBContext;
         }
        
         [Route("Register")]
@@ -35,7 +38,7 @@ namespace Parking_LOT.Controllers
             try
             {
                 
-                bool data = _BusinessLayer.Addparking(Info);                    //accept the result form Repos layer
+                bool data = _BusinessLayer.AddUser(Info);                    //accept the result form Repos layer
                 if (!data.Equals(null))
                 {
                     var status = true;
@@ -72,7 +75,6 @@ namespace Parking_LOT.Controllers
         {
             try
             {
-
                 bool data = _BusinessLayer.LoginVerification(Info);                 //data return indexer SMD format
                 var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
@@ -81,14 +83,14 @@ namespace Parking_LOT.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Role, Info.DriverCategory.ToString()),
-                    new Claim("UserName", Info.MailID.ToString()),
+                    new Claim("MailID", Info.MailID.ToString()),
                     new Claim("Password", Info.Password.ToString())
                 };
                 var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
-                    _configuration["Jwt:Issuer"],
-                    claims,
-                    expires: DateTime.Now.AddHours(120),
-                    signingCredentials: signingCreds);                                      //Token Generate for User Category
+                     _configuration["Jwt:Issuer"],
+                     claims,
+                     expires: DateTime.Now.AddHours(1),
+                     signingCredentials: signingCreds);                                   //Token Generate for User Category
 
                 if (data == true)
                 {
@@ -111,20 +113,19 @@ namespace Parking_LOT.Controllers
                 return BadRequest(new { status , error = e.Message , Message });
             }
         }
-        [Route("ParkingDetails")]
+        [Route("AddParking")]
         [HttpPost]
-        public IActionResult ParkVehicle([FromBody]ParkingInformation Info)
+        public IActionResult Park_Vehicle([FromBody]ParkingInformation Info)
         {
             try
             {
-
                 bool data = _BusinessLayer.ParkVehicle(Info);                 //data return indexer SMD format
                 
                 if (data == true)
                 {
                     var status = true;
                     var Message = "Login successful ";
-                    return Ok(new { status, Message, Info});                  //SMD for Login Success 
+                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
                 }
                 else
                 {
@@ -137,6 +138,34 @@ namespace Parking_LOT.Controllers
             {
                 var status = false;
                 var Message = "Login Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
+        }
+        [Route("UnParking")]
+        [HttpPatch]
+        public IActionResult UnPark_Vehical([FromBody]Unpark Info)
+        {
+            try
+            {
+                bool data = _BusinessLayer.UnparkVehicle(Info);                 //data return indexer SMD format
+
+                if (data == true)
+                {
+                    var status = true;
+                    var Message = "Unparking successful ";
+                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Unparking Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Unparking Failed";
                 return BadRequest(new { status, error = e.Message, Message });
             }
         }
