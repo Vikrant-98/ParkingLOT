@@ -11,16 +11,22 @@ namespace ParkingBusinesLayer.Interface
     public interface IParkingBL
     {
         //Registration
-        bool Addparking(ParkingUser Info);
+        bool AddUser(ParkingUser Info);
         //Login
         bool LoginVerification(Login Info);
 
         bool ParkVehicle(ParkingInformation Info);
 
+        bool UnparkVehicle(Unpark Info);
+
         List<ParkingInformation> GetAllParkingData();
 
-        bool DeleteRecord(string VehicleNo);
+        object DeleteCarParkingDetails(int ReceiptNumber);
 
-        bool UpdateRecord(ParkingInformation Info);
+        bool UpdateRecord(ParkingInformation Info,int ID);
+
+        object GetCarDetailsByVehicleNumber(string VehicleNumber);
+
+        object GetCarDetailsByVehicleBrand(string brand);
     }
 }

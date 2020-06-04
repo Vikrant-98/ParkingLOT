@@ -154,7 +154,6 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
-
         public object GetCarDetailsByVehicleNumber(string VehicleNumber)
         {
             try
@@ -179,7 +178,6 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
-
         public object GetCarDetailsByVehicleBrand(string brand)
         {
             try
