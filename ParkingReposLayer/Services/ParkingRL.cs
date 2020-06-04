@@ -24,7 +24,7 @@ namespace ParkingReposLayer.Services
         /// </summary>
         /// <param name="Info"></param>
         /// <returns></returns>
-        public bool Addparking(ParkingUser Info)
+        public bool AddUser(ParkingUser Info)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace ParkingReposLayer.Services
                 }
                 string MailID = Info.MailID;
                 //Validation for unique MailID
-                var Validation = dBContext.Users.Where(u => u.MailID == MailID ).FirstOrDefault();
+                var Validation = dBContext.Users.Where(u => u.MailID == MailID).FirstOrDefault();
 
                 if (Validation != null)
                 {
@@ -75,7 +75,7 @@ namespace ParkingReposLayer.Services
                 string MailID = Info.MailID;
                 string Password = EncryptedPassword.EncodePasswordToBase64(Info.Password);          //Password Encrypted
                 string DriverCategory = Info.DriverCategory;
-                
+
                 var Result = dBContext.Users.Where(u => u.MailID == MailID && u.Password == Password && u.DriverCategory == DriverCategory).FirstOrDefault();
 
                 if (Result != null)
@@ -97,8 +97,8 @@ namespace ParkingReposLayer.Services
             try
             {
                 bool parkingtype = Enum.TryParse<Parkingtype>(Info.ParkingType, true, out Parkingtype Parkingtype);
-                
-                string VehicalNo = Info.VehicalNo; 
+
+                string VehicalNo = Info.VehicalNo;
                 //Validation for unique MailID
                 var Validation = dBContext.Entities.Where(u => u.VehicalNo == VehicalNo).FirstOrDefault();
 
@@ -123,22 +123,27 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
-        public List<ParkingInformation> GetAllParkingData()
-        {
-            var allEntries = dBContext.Entities.Select(x => x).ToList();
-
-            return allEntries;
-        }
-        public bool DeleteRecord(string VehicleNo)
+        public bool UnparkVehicle(Unpark Info)
         {
             try
             {
-                var Entries = dBContext.Entities.First(x => x.VehicalNo == VehicleNo);
+                var Entries = (from x in dBContext.Entities
+                               where x.VehicalNo == Info.VehicalNo
+                               select x).First();
 
-                dBContext.Entities.Remove(Entries);
-                dBContext.SaveChanges();
+                if (Entries.ParkStatus == true)
+                {
+                    throw new Exception("Car is Unparked Already");
+                }
+
                 if (Entries != null)
                 {
+                    Entries.ParkingSlotNo = 0;
+                    Entries.ExitTime = DateTime.Now;
+                    int timeDiff = Entries.ExitTime.Subtract(Entries.EntryTime).Hours;
+                    Entries.ChargePerHr = timeDiff * 10;
+                    Entries.ParkStatus = true;
+                    dBContext.SaveChanges();
                     return true;
                 }
                 else
@@ -151,13 +156,51 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
-        public bool UpdateRecord(ParkingInformation Info)
+        public List<ParkingInformation> GetAllParkingData()
+        {
+            var allEntries = dBContext.Entities.ToList();
+
+            return allEntries;
+        }
+        public object DeleteCarParkingDetails(int ReceiptNumber)
         {
             try
             {
+                var details = dBContext.Entities.First(x => x.ParkingID == ReceiptNumber);
+
+                if (details != null)
+                {
+                    dBContext.Entities.Remove(details);
+
+                    dBContext.SaveChanges();
+                    return "Data Deleted Successfully";
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public bool UpdateRecord(ParkingInformation Info, int ID)
+        {
+            try
+            {
+                string VehicalNo = Info.VehicalNo;
+                var Validation = dBContext.Entities.Where(u => u.VehicalNo == VehicalNo && u.ParkingID != ID).FirstOrDefault();
+
+                if (Validation != null)
+                {
+                    throw new Exception("User Already Exist ");                     
+                }
+
                 var Entries = (from x in dBContext.Entities
-                              where x.ParkingID == Info.ParkingID
-                              select x).First();
+                               where x.ParkingID == ID
+                               select x).First();
                 if (Entries != null)
                 {
                     Entries.ParkingSlotNo = Info.ParkingSlotNo;
@@ -165,8 +208,8 @@ namespace ParkingReposLayer.Services
                     Entries.VehicalBrand = Info.VehicalBrand;
                     Entries.VehicalNo = Info.VehicalNo;
                     Entries.VehicalColor = Info.VehicalColor;
-                    Entries.EntryTime = Info.EntryTime;
                     Entries.ExitTime = Info.ExitTime;
+                    Entries.ParkStatus = Info.ParkStatus;
                     dBContext.SaveChanges();
                     return true;
                 }
@@ -177,6 +220,54 @@ namespace ParkingReposLayer.Services
             }
             catch (Exception e)
             {
+                throw new Exception(e.Message);
+            }
+        }
+        public object GetCarDetailsByVehicleNumber(string VehicleNo)
+        {
+            ParkingInformation detail = new ParkingInformation();
+            detail.VehicalNo = VehicleNo;
+            try
+            {
+                if (dBContext.Entities.Any(x => x.VehicalNo == VehicleNo))
+                {
+                    return (from Details in dBContext.Entities
+                            where Details.VehicalNo == VehicleNo
+                            select Details).ToList();
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public object GetCarDetailsByVehicleBrand(string brand)
+        {
+            try
+            {
+                if (dBContext.Entities.Any(x => x.VehicalBrand == brand))
+                {
+
+                    var VehicleData = (from Details in dBContext.Entities
+                                       where Details.VehicalBrand == brand
+                                       select Details).ToList();
+
+                    return VehicleData;
+                }
+                else
+                {
+                    
+                    throw new Exception();
+                }
+            }
+            catch (Exception e)
+            {
+                
                 throw new Exception(e.Message);
             }
         }
