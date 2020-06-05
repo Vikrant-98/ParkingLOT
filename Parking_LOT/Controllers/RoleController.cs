@@ -39,7 +39,64 @@ namespace Parking_LOT.Controllers
             return Ok(new { success, message, data });
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Route("AddParking")]
+        [HttpPost]
+        public IActionResult Park_Vehicle([FromBody]ParkingInformation Info)
+        {
+            try
+            {
+                bool data = _BusinessLayer.ParkVehicle(Info);                 //data return indexer SMD format
+
+                if (data == true)
+                {
+                    var status = true;
+                    var Message = "Login successful ";
+                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Login Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Login Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
+        }
+        [Route("UnParking")]
+        [HttpPost]
+        public IActionResult UnPark_Vehicle([FromBody]Unpark Info)
+        {
+            try
+            {
+                bool data = _BusinessLayer.UnparkVehicle(Info);                 //data return indexer SMD format
+
+                if (data == true)
+                {
+                    var status = true;
+                    var Message = "Unparking successful ";
+                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Unparking Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Unparking Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
+        }
+
+        [Authorize(Roles = "Owner")]
         [HttpDelete]
         [Route("{ReceiptNumber}")]
         public ActionResult DeleteCarParkingDetails(int ReceiptNumber)
@@ -72,15 +129,15 @@ namespace Parking_LOT.Controllers
             }
         }
 
-        [Route("UpdateRecord")]
+        [Route("UpdateRecord/{ID}")]
         [HttpPatch]
-        //[Authorize(Roles = "Owner")]
-        public IActionResult UpdateRecord([FromBody]ParkingInformation Info,int ID)
+        [Authorize(Roles = "Owner")]
+        public IActionResult UpdateRecord([FromBody]Information Info,int ID)
         {
             try
             {
 
-                bool data = _BusinessLayer.UpdateRecord(Info,ID);                    //accept the result form Repos layer
+                var data = _BusinessLayer.UpdateParkingRecord(Info,ID);                    //accept the result form Repos layer
                 if (!data.Equals(null))
                 {
                     var status = true;
@@ -89,7 +146,7 @@ namespace Parking_LOT.Controllers
                     {
                         status,
                         Message,
-                        Info
+                        data
                     });                                                             //data return indexer SMD format when Register success
                 }
                 else
@@ -107,9 +164,9 @@ namespace Parking_LOT.Controllers
             }
         }
 
-        //[Authorize(Roles = "Owner,Police")]
+        [Authorize(Roles = "Owner,Police")]
         [HttpGet]
-        [Route("Search/{vehicleNumber}")]
+        [Route("SearchNumber/{vehicleNumber}")]
         public ActionResult GetCarDetailsByVehicleNumber(string vehicleNumber)
         {
             try
@@ -138,8 +195,9 @@ namespace Parking_LOT.Controllers
                 return BadRequest(new { success, message });
             }
         }
-        [HttpPost]
-        [Route("Search/{brand}")]
+        [Authorize(Roles = "Owner,Police")]
+        [HttpGet]
+        [Route("SearchBrand/{brand}")]
         public ActionResult GetCarDetailsByVehicleBrand(string brand)
         {
             try

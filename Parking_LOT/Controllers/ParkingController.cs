@@ -20,11 +20,11 @@ namespace Parking_LOT.Controllers
         /// <summary>
         /// Dependenct Injection from Business layer 
         /// </summary>
-        readonly IParkingBL _BusinessLayer;
+        readonly IUserBL _BusinessLayer;
         private readonly IConfiguration _configuration;
         private Application dBContext;
-
-        public ParkingController(IParkingBL _BusinessDependencyInjection, IConfiguration _configuration, Application dBContext)
+        
+        public ParkingController(IUserBL _BusinessDependencyInjection, IConfiguration _configuration, Application dBContext)
         {
             _BusinessLayer = _BusinessDependencyInjection;
             this._configuration = _configuration;
@@ -113,59 +113,71 @@ namespace Parking_LOT.Controllers
                 return BadRequest(new { status , error = e.Message , Message });
             }
         }
-        [Route("AddParking")]
-        [HttpPost]
-        public IActionResult Park_Vehicle([FromBody]ParkingInformation Info)
+
+        [Authorize(Roles = "Owner")]
+        [HttpDelete]
+        [Route("{ReceiptNumber}")]
+        public ActionResult DeleteUserDetails(int ReceiptNumber)
         {
             try
             {
-                bool data = _BusinessLayer.ParkVehicle(Info);                 //data return indexer SMD format
-                
-                if (data == true)
+                var data = _BusinessLayer.DeleteUserDetails(ReceiptNumber);
+                bool success = false;
+                string message;
+                if (data != null)
                 {
-                    var status = true;
-                    var Message = "Login successful ";
-                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
+                    success = true;
+                    message = "Delete";
+                    return Ok(new { success, message, data });
+
                 }
                 else
                 {
-                    var status = false;
-                    var Message = "Login Failed";
-                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                    success = false;
+                    message = "Fail To Delete";
+                    return Ok(new { success, message });
+
                 }
             }
             catch (Exception e)
             {
-                var status = false;
-                var Message = "Login Failed";
-                return BadRequest(new { status, error = e.Message, Message });
+                bool success = false;
+                string message = e.Message;
+                return BadRequest(new { success, message });
             }
         }
-        [Route("UnParking")]
+
+        [Route("UpdateUserRecord/{ID}")]
         [HttpPatch]
-        public IActionResult UnPark_Vehical([FromBody]Unpark Info)
+        [Authorize(Roles = "Owner")]
+        public IActionResult UpdateUserRecord([FromBody]Users Info, int ID)
         {
             try
             {
-                bool data = _BusinessLayer.UnparkVehicle(Info);                 //data return indexer SMD format
 
-                if (data == true)
+                var data = _BusinessLayer.UpdateUserRecord(Info,ID);                    //accept the result form Repos layer
+                if (!data.Equals(null))
                 {
                     var status = true;
-                    var Message = "Unparking successful ";
-                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
+                    var Message = "Updated Successfull";
+                    return Ok(new
+                    {
+                        status,
+                        Message,
+                        data
+                    });                                                             //data return indexer SMD format when Register success
                 }
                 else
                 {
                     var status = false;
-                    var Message = "Unparking Failed";
-                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                    var Message = "Not Updated Succesfully";
+                    return this.BadRequest(new { status, Message });
                 }
             }
             catch (Exception e)
             {
                 var status = false;
-                var Message = "Unparking Failed";
+                var Message = "Not Updated Succesfully";
                 return BadRequest(new { status, error = e.Message, Message });
             }
         }
