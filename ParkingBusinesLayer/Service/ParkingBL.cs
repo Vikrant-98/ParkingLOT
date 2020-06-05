@@ -17,58 +17,7 @@ namespace ParkingBusinesLayer.Service
         {
             Parking = data;
         }
-        /// <summary>
-        /// Add Information to Register the user 
-        /// Return the status true ro false
-        /// </summary>
-        /// <param name="Info"></param>
-        /// <returns></returns>
-        public bool AddUser(ParkingUser Info)
-        {
-            try
-            {
-                string Encrypted = Info.Password;
-                Info.Password = EncryptedPassword.EncodePasswordToBase64(Encrypted);            //Password get Encrypted
-                var Result = Parking.AddUser(Info);
-                if (!Result.Equals(null))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-        /// <summary>
-        /// Information for verification of Mail ID and Password
-        /// Return the status true ro false
-        /// </summary>
-        /// <param name="Info"></param>
-        /// <returns></returns>
-        public bool LoginVerification(Login Info)
-        {
-            try
-            {
-                var Result = Parking.LoginVerification(Info);                               //get result true or false
-                if (Result == true)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
+
         public bool ParkVehicle(ParkingInformation Info)
         {
             try
@@ -111,6 +60,7 @@ namespace ParkingBusinesLayer.Service
         {
             return Parking.GetAllParkingData();
         }
+
         public object DeleteCarParkingDetails(int ReceiptNumber)
         {
             try
@@ -134,19 +84,19 @@ namespace ParkingBusinesLayer.Service
 
             }
         }
-
-        public bool UpdateRecord(ParkingInformation Info,int ID)
+        
+        public object UpdateParkingRecord(Information Info,int ID)
         {
             try
             {
-                var Result = Parking.UpdateRecord(Info,ID);                               //get result true or false
-                if (Result == true)
+                var Result = Parking.UpdateParkingRecord(Info,ID);                               //get result true or false
+                if (Result != null)
                 {
-                    return true;
+                    return Result;
                 }
                 else
                 {
-                    return false;
+                    throw new Exception("Record not updated!!!!!!!!!!!");
                 }
             }
             catch (Exception e)
@@ -161,15 +111,15 @@ namespace ParkingBusinesLayer.Service
             {
                 var data = Parking.GetCarDetailsByVehicleNumber(VehicleNumber);
                 // Check IF Data Equal To Null 
-                if (data == null)
+                if (data != null)
                 {
                     // IF Data Null Throw Exception
-                    throw new Exception();
+                    return data;
                 }
                 else
                 {
                     // Return
-                    return data;
+                    throw new Exception();
 
                 }
             }
@@ -179,7 +129,6 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
-
         public object GetCarDetailsByVehicleBrand(string brand)
         {
             try
