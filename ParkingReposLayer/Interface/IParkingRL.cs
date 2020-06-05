@@ -1,7 +1,6 @@
 ﻿using ParkingCommonLayer.Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
+
 
 namespace ParkingReposLayer.Interface
 {
@@ -10,11 +9,6 @@ namespace ParkingReposLayer.Interface
     /// </summary>
     public interface IParkingRL
     {
-        //Registration
-        bool AddUser(ParkingUser Info);
-        //Login
-        bool LoginVerification(Login Info);
-
         bool ParkVehicle(ParkingInformation Info);
 
         bool UnparkVehicle(Unpark Info);
@@ -23,7 +17,7 @@ namespace ParkingReposLayer.Interface
 
         object DeleteCarParkingDetails(int ReceiptNumber);
 
-        bool UpdateRecord(ParkingInformation Info,int ID);
+        object UpdateParkingRecord(Information Info,int ID);
 
         object GetCarDetailsByVehicleNumber(string VehicleNumber);
 

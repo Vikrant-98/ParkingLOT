@@ -19,79 +19,7 @@ namespace ParkingReposLayer.Services
         {
             this.dBContext = dBContext;
         }
-        /// <summary>
-        /// Registration for new User 
-        /// </summary>
-        /// <param name="Info"></param>
-        /// <returns></returns>
-        public bool AddUser(ParkingUser Info)
-        {
-            try
-            {
-                bool input = Enum.TryParse<Driver>(Info.DriverCategory, true, out Driver driver);
-                if (input != true)
-                {
-                    throw new Exception("Invalid Driver Category");
-                }
-                string MailID = Info.MailID;
-                //Validation for unique MailID
-                var Validation = dBContext.Users.Where(u => u.MailID == MailID).FirstOrDefault();
-
-                if (Validation != null)
-                {
-                    throw new Exception("User Already Exist ");                     //throw exception when user exist
-                }
-
-                var Result = dBContext.Users.Add(Info);
-                dBContext.SaveChanges();
-                if (Result != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-        /// <summary>
-        /// Checking for valid user using MailID and Password
-        /// </summary>
-        /// <param name="Info"></param>
-        /// <returns></returns>
-        public bool LoginVerification(Login Info)
-        {
-            try
-            {
-                bool input = Enum.TryParse<Driver>(Info.DriverCategory, true, out Driver driver);
-                if (input != true)
-                {
-                    throw new Exception("Invalid Driver Category");
-                }
-                string MailID = Info.MailID;
-                string Password = EncryptedPassword.EncodePasswordToBase64(Info.Password);          //Password Encrypted
-                string DriverCategory = Info.DriverCategory;
-
-                var Result = dBContext.Users.Where(u => u.MailID == MailID && u.Password == Password && u.DriverCategory == DriverCategory).FirstOrDefault();
-
-                if (Result != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
+        
         public bool ParkVehicle(ParkingInformation Info)
         {
             try
@@ -106,11 +34,12 @@ namespace ParkingReposLayer.Services
                 {
                     throw new Exception("User Already Exist ");                     //throw exception when user exist
                 }
-
+                Info.ParkStatus = true;
                 var Result = dBContext.Entities.Add(Info);
-                dBContext.SaveChanges();
+               
                 if (Result != null)
                 {
+                    dBContext.SaveChanges();
                     return true;
                 }
                 else
@@ -131,7 +60,7 @@ namespace ParkingReposLayer.Services
                                where x.VehicalNo == Info.VehicalNo
                                select x).First();
 
-                if (Entries.ParkStatus == true)
+                if (Entries.ParkStatus == false)
                 {
                     throw new Exception("Car is Unparked Already");
                 }
@@ -142,7 +71,8 @@ namespace ParkingReposLayer.Services
                     Entries.ExitTime = DateTime.Now;
                     int timeDiff = Entries.ExitTime.Subtract(Entries.EntryTime).Hours;
                     Entries.ChargePerHr = timeDiff * 10;
-                    Entries.ParkStatus = true;
+                    Entries.ParkStatus = false
+                        ;
                     dBContext.SaveChanges();
                     return true;
                 }
@@ -162,6 +92,7 @@ namespace ParkingReposLayer.Services
 
             return allEntries;
         }
+
         public object DeleteCarParkingDetails(int ReceiptNumber)
         {
             try
@@ -173,7 +104,7 @@ namespace ParkingReposLayer.Services
                     dBContext.Entities.Remove(details);
 
                     dBContext.SaveChanges();
-                    return "Data Deleted Successfully";
+                    return details;
                 }
                 else
                 {
@@ -186,11 +117,12 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
-        public bool UpdateRecord(ParkingInformation Info, int ID)
+
+        public object UpdateParkingRecord(Information Info, int ID)
         {
             try
             {
-                string VehicalNo = Info.VehicalNo;
+                string VehicalNo = Info.VehicalNumber;
                 var Validation = dBContext.Entities.Where(u => u.VehicalNo == VehicalNo && u.ParkingID != ID).FirstOrDefault();
 
                 if (Validation != null)
@@ -206,12 +138,10 @@ namespace ParkingReposLayer.Services
                     Entries.ParkingSlotNo = Info.ParkingSlotNo;
                     Entries.ParkingType = Info.ParkingType;
                     Entries.VehicalBrand = Info.VehicalBrand;
-                    Entries.VehicalNo = Info.VehicalNo;
+                    Entries.VehicalNo = Info.VehicalNumber;
                     Entries.VehicalColor = Info.VehicalColor;
-                    Entries.ExitTime = Info.ExitTime;
-                    Entries.ParkStatus = Info.ParkStatus;
                     dBContext.SaveChanges();
-                    return true;
+                    return Entries;
                 }
                 else
                 {
