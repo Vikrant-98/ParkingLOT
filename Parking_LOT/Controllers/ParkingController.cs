@@ -1,108 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using ParkingBusinesLayer.Interface;
 using ParkingCommonLayer.Services;
 using ParkingReposLayer.ApplicationDB;
 
 namespace Parking_LOT.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class ParkingController : ControllerBase
     {
-        /// <summary>
-        /// Dependenct Injection from Business layer 
-        /// </summary>
-        readonly IUserBL _BusinessLayer;
+        readonly IParkingBL _BusinessLayer;
         private readonly IConfiguration _configuration;
         private Application dBContext;
-        
-        public ParkingController(IUserBL _BusinessDependencyInjection, IConfiguration _configuration, Application dBContext)
+
+        public ParkingController(IParkingBL _BusinessDependencyInjection, IConfiguration _configuration, Application dBContext)
         {
             _BusinessLayer = _BusinessDependencyInjection;
             this._configuration = _configuration;
             this.dBContext = dBContext;
         }
-       
-        [Route("Register")]
+        //
+        /// <summary>
+        /// Park the vehicle
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
+        [Route("ParkVehicle")]
         [HttpPost]
-        public IActionResult RegisterUser([FromBody]ParkingUser Info)
+        public IActionResult ParkVehicle([FromBody]ParkingInformation Info)
         {
             try
             {
-                
-                bool data = _BusinessLayer.AddUser(Info);                    //accept the result form Repos layer
-                if (!data.Equals(null))
-                {
-                    var status = true;
-                    var Message = "Register Successfull";
-                    return Ok(new {
-                        status,
-                        Message,
-                        Info.ID,
-                        Info.FirstName,
-                        Info.LastName,
-                        Info.MailID,
-                        Info.DriverCategory,
-                        Info.CreateDate,
-                        Info.ModifiedDate
-                    });                                                             //data return indexer SMD format when Register success
-                }
-                else
-                {
-                    var status = false;
-                    var Message = "Register Failed";
-                    return this.BadRequest(new { status, Message});
-                }
-            }
-            catch (Exception e)
-            {
-                var status = false;
-                var Message = "Register Failed";
-                return BadRequest(new { status , error = e.Message , Message });
-            }
-        }
-        [Route("Login")]
-        [HttpPost]
-        public IActionResult LoginUser([FromBody]Login Info)
-        {
-            try
-            {
-                bool data = _BusinessLayer.LoginVerification(Info);                 //data return indexer SMD format
-                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Role, Info.DriverCategory.ToString()),
-                    new Claim("MailID", Info.MailID.ToString()),
-                    new Claim("Password", Info.Password.ToString())
-                };
-                var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
-                     _configuration["Jwt:Issuer"],
-                     claims,
-                     expires: DateTime.Now.AddHours(1),
-                     signingCredentials: signingCreds);                                   //Token Generate for User Category
+                bool data = _BusinessLayer.ParkVehicle(Info);                 //data return indexer SMD format
 
                 if (data == true)
                 {
                     var status = true;
-                    var Message = "Login successful ";
-                    var Token = new JwtSecurityTokenHandler().WriteToken(token);
-                    return Ok(new { status,Info.MailID, Message, Token });                  //SMD for Login Success 
+                    var Message = "ParkVehicle successful ";
+                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
                 }
                 else
                 {
                     var status = false;
-                    var Message = "Login Failed";
+                    var Message = "Parking Failed";
                     return BadRequest(new { status, Message });                             //SMD for Ligin Fails
                 }
             }
@@ -110,32 +58,112 @@ namespace Parking_LOT.Controllers
             {
                 var status = false;
                 var Message = "Login Failed";
-                return BadRequest(new { status , error = e.Message , Message });
+                return BadRequest(new { status, error = e.Message, Message });
             }
         }
-
-        [Authorize(Roles = "Owner")]
-        [HttpDelete]
-        [Route("{ReceiptNumber}")]
-        public ActionResult DeleteUserDetails(int ReceiptNumber)
+        /// <summary>
+        /// Unpark the Vehicle
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
+        [Route("UnparkVehicle")]
+        [HttpPost]
+        public IActionResult UnPark_Vehicle([FromBody]Unpark Info)
         {
             try
             {
-                var data = _BusinessLayer.DeleteUserDetails(ReceiptNumber);
+                bool data = _BusinessLayer.UnparkVehicle(Info);                 //data return indexer SMD format
+
+                if (data == true)
+                {
+                    var status = true;
+                    var Message = "Unparking successful ";
+                    return Ok(new { status, Message, Info });                  //SMD for Login Success 
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Unparking Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Unparking Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
+        }
+        /// <summary>
+        /// Get All details
+        /// </summary>
+        /// <returns></returns>
+        [Route("ParkingDetails")]
+        [HttpGet]
+        [Authorize(Roles = "Owner,Police")]
+        public ActionResult<List<ParkingInformation>> GetAllParkingData()
+        {
+            bool success = true;
+            string message = "ALL Records of Parking ";
+            var data = _BusinessLayer.GetAllParkingData();
+            return Ok(new { success, message, data });                                   //SMD for All Details
+        }
+        /// <summary>
+        /// Get All details
+        /// </summary>
+        /// <returns></returns>
+        [Route("parkDetails")]
+        [HttpGet]
+        [Authorize(Roles = "Owner,Police")]
+        public ActionResult<List<ParkingInformation>> GetAllParkData()
+        {
+            bool success = true;
+            string message = "ALL Records of UnPark Vehicle ";
+            var data = _BusinessLayer.GetAllParkData();
+            return Ok(new { success, message, data });                                   //SMD for All Details
+        }
+        /// <summary>
+        /// Get All details
+        /// </summary>
+        /// <returns></returns>
+        [Route("UnparkDetails")]
+        [HttpGet]
+        [Authorize(Roles = "Owner,Police")]
+        public ActionResult<List<ParkingInformation>> GetAllUnParkData()
+        {
+            bool success = true;
+            string message = "ALL Records of UnPark Vehicle ";
+            var data = _BusinessLayer.GetAllUnParkData();
+            return Ok(new { success, message, data });                                   //SMD for All Details
+        }
+        /// <summary>
+        /// Delete Record for Vehicle
+        /// Authorizer by Owner
+        /// </summary>
+        /// <param name="ReceiptNumber"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Owner")]
+        [HttpDelete]
+        [Route("{ReceiptNumber}")]
+        public ActionResult DeleteCarParkingDetails(int ReceiptNumber)
+        {
+            try
+            {
+                var data = _BusinessLayer.DeleteCarParkingDetails(ReceiptNumber);
                 bool success = false;
                 string message;
                 if (data != null)
                 {
                     success = true;
                     message = "Delete";
-                    return Ok(new { success, message, data });
+                    return Ok(new { success, message, data });                          //SMD format for Delete succesful
 
                 }
                 else
                 {
                     success = false;
                     message = "Fail To Delete";
-                    return Ok(new { success, message });
+                    return BadRequest(new { success, message });                        //SMD format for Delete unsuccess
 
                 }
             }
@@ -146,16 +174,22 @@ namespace Parking_LOT.Controllers
                 return BadRequest(new { success, message });
             }
         }
-
-        [Route("UpdateUserRecord/{ID}")]
-        [HttpPatch]
+        /// <summary>
+        /// Update Record
+        /// Authorizer by Owner
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        [Route("{ID}")]
+        [HttpPut]
         [Authorize(Roles = "Owner")]
-        public IActionResult UpdateUserRecord([FromBody]Users Info, int ID)
+        public IActionResult UpdateRecord([FromBody]Information Info,int ID)
         {
             try
             {
 
-                var data = _BusinessLayer.UpdateUserRecord(Info,ID);                    //accept the result form Repos layer
+                var data = _BusinessLayer.UpdateParkingRecord(Info,ID);                    //accept the result form Repos layer
                 if (!data.Equals(null))
                 {
                     var status = true;
@@ -179,6 +213,80 @@ namespace Parking_LOT.Controllers
                 var status = false;
                 var Message = "Not Updated Succesfully";
                 return BadRequest(new { status, error = e.Message, Message });
+            }
+        }
+
+        /// <summary>
+        /// Get car details from vehicle number
+        /// Authorizer by Owner and police
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Owner,Police")]
+        [HttpGet]
+        [Route("VehicleNumber")]
+        public ActionResult GetCarDetailsByVehicleNumber([FromBody]Unpark Info)
+        {
+            try
+            {
+                var data = _BusinessLayer.GetCarDetailsByVehicleNumber(Info.VehicalNo);
+                bool success = false;
+                string message;
+                if (data != null)
+                {
+                    success = true;
+                    message = "Search ";
+                    return Ok(new { success, message, data });                          //SMD format for Vehicle Number Details
+                    
+                }
+                else
+                {
+                    success = false;
+                    message = "Fail To Search";
+                    return Ok(new { success, message });                                //SMD format for not get any Details
+                }
+            }
+            catch (Exception e)
+            {
+                bool success = false;
+                string message = e.Message;
+                return BadRequest(new { success, message });
+            }
+        }
+        /// <summary>
+        /// Get car details by their brand
+        /// Authorizer by Owner and police
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Owner,Police")]
+        [HttpGet]
+        [Route("{brand}")]
+        public ActionResult GetCarDetailsByVehicleBrand(string brand)
+        {
+            try
+            {
+                var data = _BusinessLayer.GetCarDetailsByVehicleBrand(brand);
+                bool success = false;
+                string message;
+                if (data != null)
+                {
+                    success = true;
+                    message = "Search";
+                    return Ok(new { success, message, data });                          //SMD format for Vehicle brand found
+                }
+                else
+                {
+                    success = false;
+                    message = "Search Fail";
+                    return Ok(new { success, message });                                //SMD format for vehicle not found
+                }
+            }
+            catch (Exception e)
+            {
+                bool success = false;
+                string message = e.Message;
+                return BadRequest(new { success, message });
             }
         }
     }
