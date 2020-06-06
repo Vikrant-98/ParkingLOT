@@ -15,9 +15,12 @@ namespace XUnitTestforParkingLOT
 {
     public class UnitTest1
     {
-        readonly IParkingBL _businessLayer;
-        readonly IParkingRL _reposLayer;
+        readonly IParkingBL _businessLayerparking;
+        readonly IParkingRL _reposLayerParking;
+        readonly IUserRL _reposLayeruser;
+        readonly IUserBL _businessLayeruser;
         private readonly IConfiguration _configuration;
+        private Application dBContext;
 
         public static DbContextOptions<Application> User { get; }
 
@@ -32,20 +35,22 @@ namespace XUnitTestforParkingLOT
         {
 
             var context = new Application(User);
-            _reposLayer = new ParkingRL(context);
-            _businessLayer = new ParkingBL(_reposLayer);
+            _reposLayeruser = new UserRL(context);
+            _reposLayerParking = new ParkingRL(context);
+            _businessLayeruser = new UserBL(_reposLayeruser);
+            _businessLayerparking = new ParkingBL(_reposLayerParking);
         }
         [Fact]
         public void GivenDataPassResult_Ok()
         {
-            var controller = new ParkingController(_businessLayer,_configuration);
+            var controller = new UserController(_businessLayeruser,_configuration,dBContext);
             var result = new ParkingUser
             {
                 FirstName = "Aarti",
                 LastName = "Ahire",
                 MailID = "aartiahire@gmail.com",
                 DriverCategory = "Police",
-                Password = "aartiahire"
+                Password = "aarti1234"
             };
             var okResult = controller.RegisterUser(result);
 
@@ -54,13 +59,13 @@ namespace XUnitTestforParkingLOT
         [Fact]
         public void GivenIncorrectDataFormatPass_BadRequestResult_Exception()
         {
-            var controller = new ParkingController(_businessLayer, _configuration);
+            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
             var result = new ParkingUser
             {
                 FirstName = "Vinayak",
                 LastName = "UshaKola",
                 MailID = "vinayak@gmail.com",
-                Password = "vinayak@5678"
+                Password = "vinayak1234"
             };
             var okResult = controller.RegisterUser(result);
 
@@ -69,7 +74,7 @@ namespace XUnitTestforParkingLOT
         [Fact]
         public void GivenIncorrectNameFormatPass_BadRequestResult_Exception()
         {
-            var controller = new ParkingController(_businessLayer, _configuration);
+            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
             var result = new ParkingUser
             {
                 FirstName = "vikrant",
@@ -85,14 +90,14 @@ namespace XUnitTestforParkingLOT
         [Fact]
         public void GivenIncorrect_EMailDataFormatPass_BadRequestResult_Exception()
         {
-            var controller = new ParkingController(_businessLayer, _configuration);
+            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
             var result = new ParkingUser
             {
                 FirstName = "Vinayak",
                 LastName = "UshaKola",
                 MailID = "v@gmail.com",
                 DriverCategory = "Owner",
-                Password = "vinayak@5678"
+                Password = "vinayak1234"
             };
             var okResult = controller.RegisterUser(result);
 
@@ -101,14 +106,14 @@ namespace XUnitTestforParkingLOT
         [Fact]
         public void Given_Existing_EMailDataFormatPass_BadRequestResult_Exception()
         {
-            var controller = new ParkingController(_businessLayer, _configuration);
+            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
             var result = new ParkingUser
             {
-                FirstName = "Vinayak",
-                LastName = "UshaKola",
-                MailID = "vinayak@gmail.com",
+                FirstName = "Vikrant",
+                LastName = "Chitte",
+                MailID = "chittevikrant@gmail.com",
                 DriverCategory = "Owner",
-                Password = "Vikayak1234"
+                Password = "Vikrant1234"
             };
             var okResult = controller.RegisterUser(result);
 
@@ -117,14 +122,14 @@ namespace XUnitTestforParkingLOT
         [Fact]
         public void GivenSameDataPasses_BadRequestResult_Exception()
         {
-            var controller = new ParkingController(_businessLayer, _configuration);
+            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
             var result = new ParkingUser
             {
                 FirstName = "Vishal",
                 LastName = "Chitte",
                 MailID = "vishalchitte@gmail.com",
                 DriverCategory = "Driver",
-                Password = "vishal@6666"
+                Password = "vishal1234"
             };
             var okResult = controller.RegisterUser(result);
 
@@ -133,13 +138,58 @@ namespace XUnitTestforParkingLOT
         [Fact]
         public void GivenInvalidValid_EmailandPassword_Passes_BadRequestResult_Exception()
         {
-            var controller = new ParkingController(_businessLayer, _configuration);
+            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
             var result = new Login
             {
                 MailID = "vishalchitte@gmail.com",
                 Password = "vishal@1234"
             };
             var okResult = controller.LoginUser(result);
+
+            Assert.IsType<BadRequestObjectResult>(okResult);
+        }
+        [Fact]
+        public void GivenDataForParkedVehiclePasses_Ok()
+        {
+            var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
+            var result = new ParkingInformation
+            {
+                VehicalNo ="MH 18 YD 8951",
+                VehicalBrand="Honda",
+                VehicalColor="White",
+                ParkingType="Vallet"
+            };
+            var okResult = controller.ParkVehicle(result);
+
+            Assert.IsType<OkObjectResult>(okResult);
+        }
+        [Fact]
+        public void GivenSameForParkedVehicleDataPasses_BadRequestResult_Exception()
+        {
+            var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
+            var result = new ParkingInformation
+            {
+                VehicalNo = "MH 07 BT 1895",
+                VehicalBrand = "BMW",
+                VehicalColor = "Black",
+                ParkingType = "Owner"
+            };
+            var okResult = controller.ParkVehicle(result);
+
+            Assert.IsType<BadRequestObjectResult>(okResult);
+        }
+        [Fact]
+        public void GivenWrongParkedVehicleNumberPasses_BadRequestResult_Exception()
+        {
+            var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
+            var result = new ParkingInformation
+            {
+                VehicalNo = "MH 07",
+                VehicalBrand = "BMW",
+                VehicalColor = "Black",
+                ParkingType = "Owner"
+            };
+            var okResult = controller.ParkVehicle(result);
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
