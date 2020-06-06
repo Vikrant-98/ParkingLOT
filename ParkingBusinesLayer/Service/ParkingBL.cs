@@ -17,7 +17,11 @@ namespace ParkingBusinesLayer.Service
         {
             Parking = data;
         }
-
+        /// <summary>
+        /// Park the vehicle
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
         public bool ParkVehicle(ParkingInformation Info)
         {
             try
@@ -37,6 +41,11 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Unpark the vehicle
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
         public bool UnparkVehicle(Unpark Info)
         {
             try
@@ -56,16 +65,44 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Return list for Parking details
+        /// </summary>
+        /// <returns></returns>
         public List<ParkingInformation> GetAllParkingData()
         {
+            //Return Get all Details
             return Parking.GetAllParkingData();
         }
-
+        /// <summary>
+        /// Return list for Parking details
+        /// </summary>
+        /// <returns></returns>
+        public List<ParkingInformation> GetAllParkData()
+        {
+            //Return Get all Details
+            return Parking.GetAllParkData();
+        }
+        /// <summary>
+        /// Return list for Parking details
+        /// </summary>
+        /// <returns></returns>
+        public List<ParkingInformation> GetAllUnParkData()
+        {
+            //Return Get all Details
+            return Parking.GetAllUnParkData();
+        }
+        /// <summary>
+        /// Delete Parking Details
+        /// </summary>
+        /// <param name="ReceiptNumber"></param>
+        /// <returns></returns>
         public object DeleteCarParkingDetails(int ReceiptNumber)
         {
             try
             {
                 var data = Parking.DeleteCarParkingDetails(ReceiptNumber);
+                // Check IF Data Equal To Null 
                 if (data != null)
                 {
                     return data;
@@ -84,7 +121,12 @@ namespace ParkingBusinesLayer.Service
 
             }
         }
-        
+        /// <summary>
+        /// Update Parking Record
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public object UpdateParkingRecord(Information Info,int ID)
         {
             try
@@ -104,7 +146,11 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
-
+        /// <summary>
+        /// Get car details by Vehicle Number
+        /// </summary>
+        /// <param name="VehicleNumber"></param>
+        /// <returns></returns>
         public object GetCarDetailsByVehicleNumber(string VehicleNumber)
         {
             try
@@ -129,6 +175,11 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Get car details using brands
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <returns></returns>
         public object GetCarDetailsByVehicleBrand(string brand)
         {
             try
@@ -153,5 +204,6 @@ namespace ParkingBusinesLayer.Service
                 throw new Exception(e.Message);
             }
         }
+        
     }
 }

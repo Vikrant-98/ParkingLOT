@@ -1,4 +1,5 @@
-﻿using ParkingCommonLayer.Services;
+﻿using ParkingBusinesLayer.Interface;
+using ParkingCommonLayer.Services;
 using ParkingReposLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -6,13 +7,13 @@ using System.Text;
 
 namespace ParkingBusinesLayer.Service
 {
-    public class UserBL
+    public class UserBL : IUserBL
     {
         private IUserRL User;
 
-        public UserBL(IUserRL User)
+        public UserBL(IUserRL Data)
         {
-            this.User = User;
+            this.User = Data;
         }
 
         /// <summary>
@@ -81,8 +82,6 @@ namespace ParkingBusinesLayer.Service
                 {
                     throw new Exception();
                 }
-
-
             }
             catch (Exception e)
             {
