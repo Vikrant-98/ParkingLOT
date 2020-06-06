@@ -15,6 +15,10 @@ namespace ParkingReposLayer.Interface
 
         List<ParkingInformation> GetAllParkingData();
 
+        List<ParkingInformation> GetAllParkData();
+
+        List<ParkingInformation> GetAllUnParkData();
+
         object DeleteCarParkingDetails(int ReceiptNumber);
 
         object UpdateParkingRecord(Information Info,int ID);

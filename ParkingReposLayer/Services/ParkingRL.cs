@@ -14,12 +14,16 @@ namespace ParkingReposLayer.Services
         /// Dependency Injection from application and repos layer
         /// </summary>
         private Application dBContext;
-
+        readonly Random random = new Random();
         public ParkingRL(Application dBContext)
         {
             this.dBContext = dBContext;
         }
-        
+        /// <summary>
+        /// Park the Vehicle 
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
         public bool ParkVehicle(ParkingInformation Info)
         {
             try
@@ -27,8 +31,9 @@ namespace ParkingReposLayer.Services
                 bool parkingtype = Enum.TryParse<Parkingtype>(Info.ParkingType, true, out Parkingtype Parkingtype);
 
                 string VehicalNo = Info.VehicalNo;
-                //Validation for unique MailID
                 var Validation = dBContext.Entities.Where(u => u.VehicalNo == VehicalNo).FirstOrDefault();
+
+                Info.ParkingSlotNo = AllotcateSlot();
 
                 if (Validation != null)
                 {
@@ -52,6 +57,33 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Alloting the slot number
+        /// </summary>
+        /// <returns></returns>
+        public int AllotcateSlot()
+        {
+            int slot = 1;
+            
+            bool flag = true;
+            while (flag != false)
+            {
+                slot = (random.Next() % 100) + 1;
+                var result = dBContext.Entities.Where(u => u.ParkingSlotNo == slot).FirstOrDefault();
+                if (result == null)
+                {
+                    flag = false;                     
+                }
+            }
+            return slot;
+        }
+        /// <summary>
+        /// Unpark the vehicle 
+        /// Exittime modified
+        /// charge get calculated
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <returns></returns>
         public bool UnparkVehicle(Unpark Info)
         {
             try
@@ -86,13 +118,41 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Giving the All in form pf list
+        /// </summary>
+        /// <returns></returns>
         public List<ParkingInformation> GetAllParkingData()
         {
             var allEntries = dBContext.Entities.ToList();
 
             return allEntries;
         }
+        /// <summary>
+        /// Giving the All in form pf list
+        /// </summary>
+        /// <returns></returns>
+        public List<ParkingInformation> GetAllParkData()
+        {
+            var allEntries = dBContext.Entities.Where(x => x.ParkStatus == true).ToList();
 
+            return allEntries;
+        }
+        /// <summary>
+        /// Giving the All in form pf list
+        /// </summary>
+        /// <returns></returns>
+        public List<ParkingInformation> GetAllUnParkData()
+        {
+            var allEntries = dBContext.Entities.Where(x => x.ParkStatus == false).ToList();
+
+            return allEntries;
+        }
+        /// <summary>
+        /// Deleted Parking Details
+        /// </summary>
+        /// <param name="ReceiptNumber"></param>
+        /// <returns></returns>
         public object DeleteCarParkingDetails(int ReceiptNumber)
         {
             try
@@ -117,7 +177,12 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
-
+        /// <summary>
+        /// Update Parking Details
+        /// </summary>
+        /// <param name="Info"></param>
+        /// <param name="ID"></param>
+        /// <returns></returns>
         public object UpdateParkingRecord(Information Info, int ID)
         {
             try
@@ -153,6 +218,11 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Get Car Details by Vehicle Number
+        /// </summary>
+        /// <param name="VehicleNo"></param>
+        /// <returns></returns>
         public object GetCarDetailsByVehicleNumber(string VehicleNo)
         {
             ParkingInformation detail = new ParkingInformation();
@@ -176,6 +246,11 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
+        /// <summary>
+        /// Get car details by Vehicle Brand
+        /// </summary>
+        /// <param name="brand"></param>
+        /// <returns></returns>
         public object GetCarDetailsByVehicleBrand(string brand)
         {
             try
@@ -201,5 +276,6 @@ namespace ParkingReposLayer.Services
                 throw new Exception(e.Message);
             }
         }
+        
     }
 }
