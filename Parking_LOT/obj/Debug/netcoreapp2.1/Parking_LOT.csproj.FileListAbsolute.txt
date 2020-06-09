@@ -19,3 +19,5 @@ C:\Users\The Daddy\source\repos\Parking_LOT\Parking_LOT\bin\Debug\netcoreapp2.1\
 C:\Users\The Daddy\source\repos\Parking_LOT\Parking_LOT\bin\Debug\netcoreapp2.1\ParkingBusinesLayer.pdb
 C:\Users\The Daddy\source\repos\Parking_LOT\Parking_LOT\bin\Debug\netcoreapp2.1\ParkingCommonLayer.pdb
 C:\Users\The Daddy\source\repos\Parking_LOT\Parking_LOT\bin\Debug\netcoreapp2.1\ParkingReposLayer.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\Parking_LOT\bin\Debug\netcoreapp2.1\MessageListner.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\Parking_LOT\bin\Debug\netcoreapp2.1\MessageListner.pdb

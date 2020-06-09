@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using MailKit.Net.Smtp;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using ParkingBusinesLayer.Interface;
+using ParkingCommonLayer.ResponseModels;
 using ParkingCommonLayer.Services;
 using ParkingReposLayer.ApplicationDB;
+using Parking_LOT.MSMQService;
 
 namespace Parking_LOT.Controllers
 {
@@ -23,7 +27,8 @@ namespace Parking_LOT.Controllers
         readonly IUserBL _BusinessLayer;
         private readonly IConfiguration _configuration;
         private Application dBContext;
-        
+        MessageSender msmqSender = new MessageSender();
+
         public UserController(IUserBL _BusinessDependencyInjection, IConfiguration _configuration, Application dBContext)
         {
             _BusinessLayer = _BusinessDependencyInjection;
@@ -41,12 +46,14 @@ namespace Parking_LOT.Controllers
         {
             try
             {
-                
+                string password = Info.Password;
                 bool data = _BusinessLayer.AddUser(Info);                    //accept the result form Repos layer
                 if (!data.Equals(null))
                 {
                     var status = true;
                     var Message = "Register Successfull";
+                    string messagesender = "Registration successful with" + "\n Email : " + Convert.ToString(Info.MailID) + "\n and" + "\n Password : " + Convert.ToString(Info.Password) + "\n of User type : " + Info.DriverCategory;
+                    msmqSender.Message(messagesender);
                     return Ok(new {
                         status,
                         Message,
@@ -58,6 +65,7 @@ namespace Parking_LOT.Controllers
                         Info.CreateDate,
                         Info.ModifiedDate
                     });                                                             //data return indexer SMD format when Register success
+                    
                 }
                 else
                 {
@@ -71,6 +79,25 @@ namespace Parking_LOT.Controllers
                 var status = false;
                 var Message = "Register Failed";
                 return BadRequest(new { status , error = e.Message , Message });
+            }
+        }
+        private void Mail()
+        {
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Vikrant", "chittevikey55@gmail.com"));
+            message.To.Add(new MailboxAddress("Vikrant", "chittevikey5@gmail.com"));
+            message.Subject = "Sample Mail";
+            message.Body = new TextPart()
+            {
+                Text = "This is Sample mail"
+            };
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("chittevikey55@gmail.com","vik98CH!");
+                client.Send(message);
+                client.Disconnect(true);
             }
         }
         /// <summary>
@@ -103,11 +130,15 @@ namespace Parking_LOT.Controllers
                 
                 if (data == true)
                 {
+                    LoginResponse responseData = new LoginResponse
+                    {
+                        mail = Info.MailID,
+                        token = new JwtSecurityTokenHandler().WriteToken(token)
+                    };
                     var status = true;
                     var Message = "Login successful ";
-                    var Token = new JwtSecurityTokenHandler().WriteToken(token);
                     
-                    return Ok(new { status,Info.MailID, Message, Token });                  //SMD for Login Success 
+                    return Ok(new { status, Message, responseData});                  //SMD for Login Success 
                 }
                 else
                 {
