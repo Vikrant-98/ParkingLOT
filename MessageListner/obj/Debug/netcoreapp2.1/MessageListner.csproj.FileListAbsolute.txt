@@ -1,0 +1,11 @@
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\bin\Debug\netcoreapp2.1\MessageListner.deps.json
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\bin\Debug\netcoreapp2.1\MessageListner.runtimeconfig.json
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\bin\Debug\netcoreapp2.1\MessageListner.runtimeconfig.dev.json
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\bin\Debug\netcoreapp2.1\MessageListner.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\bin\Debug\netcoreapp2.1\MessageListner.pdb
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\obj\Debug\netcoreapp2.1\MessageListner.csprojAssemblyReference.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\obj\Debug\netcoreapp2.1\MessageListner.csproj.CoreCompileInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\obj\Debug\netcoreapp2.1\MessageListner.AssemblyInfoInputs.cache
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\obj\Debug\netcoreapp2.1\MessageListner.AssemblyInfo.cs
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\obj\Debug\netcoreapp2.1\MessageListner.dll
+C:\Users\The Daddy\source\repos\Parking_LOT\MessageListner\obj\Debug\netcoreapp2.1\MessageListner.pdb
