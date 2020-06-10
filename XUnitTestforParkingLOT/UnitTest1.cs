@@ -40,27 +40,33 @@ namespace XUnitTestforParkingLOT
             _businessLayeruser = new UserBL(_reposLayeruser);
             _businessLayerparking = new ParkingBL(_reposLayerParking);
         }
+        /// <summary>
+        /// Given all details pass ok
+        /// </summary>
         [Fact]
         public void GivenDataPassResult_Ok()
         {
             var controller = new UserController(_businessLayeruser,_configuration,dBContext);
-            var result = new ParkingUser
+            var result = new Users
             {
-                FirstName = "Aarti",
-                LastName = "Ahire",
-                MailID = "aartiahire@gmail.com",
-                DriverCategory = "Police",
-                Password = "aarti1234"
+                FirstName = "Kartika",
+                LastName = "Sharma",
+                MailID = "kartikasharma@gmail.com",
+                DriverCategory = "Security",
+                Password = "kartika1234"
             };
             var okResult = controller.RegisterUser(result);
 
             Assert.IsType<OkObjectResult>(okResult);
         }
+        /// <summary>
+        /// Driver Cahegory missing
+        /// </summary>
         [Fact]
         public void GivenIncorrectDataFormatPass_BadRequestResult_Exception()
         {
             var controller = new UserController(_businessLayeruser, _configuration,dBContext);
-            var result = new ParkingUser
+            var result = new Users
             {
                 FirstName = "Vinayak",
                 LastName = "UshaKola",
@@ -71,11 +77,14 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        /// <summary>
+        /// Incorrect nake format pass bad request Exception
+        /// </summary>
         [Fact]
         public void GivenIncorrectNameFormatPass_BadRequestResult_Exception()
         {
             var controller = new UserController(_businessLayeruser, _configuration,dBContext);
-            var result = new ParkingUser
+            var result = new Users
             {
                 FirstName = "vikrant",
                 LastName = "chitte",
@@ -86,12 +95,14 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
-
+        /// <summary>
+        /// Incorrect Email Address Exception
+        /// </summary>
         [Fact]
         public void GivenIncorrect_EMailDataFormatPass_BadRequestResult_Exception()
         {
             var controller = new UserController(_businessLayeruser, _configuration,dBContext);
-            var result = new ParkingUser
+            var result = new Users
             {
                 FirstName = "Vinayak",
                 LastName = "UshaKola",
@@ -103,11 +114,14 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        /// <summary>
+        /// Existing Email Address Exception
+        /// </summary>
         [Fact]
         public void Given_Existing_EMailDataFormatPass_BadRequestResult_Exception()
         {
             var controller = new UserController(_businessLayeruser, _configuration,dBContext);
-            var result = new ParkingUser
+            var result = new Users
             {
                 FirstName = "Vikrant",
                 LastName = "Chitte",
@@ -119,11 +133,14 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        /// <summary>
+        /// Same Data Passing Bad request Exception 
+        /// </summary>
         [Fact]
         public void GivenSameDataPasses_BadRequestResult_Exception()
         {
             var controller = new UserController(_businessLayeruser, _configuration,dBContext);
-            var result = new ParkingUser
+            var result = new Users
             {
                 FirstName = "Vishal",
                 LastName = "Chitte",
@@ -135,6 +152,9 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        /// <summary>
+        /// Given wrong Email address and password Exception
+        /// </summary>
         [Fact]
         public void GivenInvalidValid_EmailandPassword_Passes_BadRequestResult_Exception()
         {
@@ -148,14 +168,17 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        /// <summary>
+        /// Given Correct Data for Add Parking result OK  
+        /// </summary>
         [Fact]
         public void GivenDataForParkedVehiclePasses_Ok()
         {
             var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
-            var result = new ParkingInformation
+            var result = new Information
             {
-                VehicalNo ="MH 18 YD 8951",
-                VehicalBrand="Honda",
+                VehicalNumber ="MH 15 YD 8951",
+                VehicalBrand="BMW",
                 VehicalColor="White",
                 ParkingType="Vallet"
             };
@@ -163,13 +186,16 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<OkObjectResult>(okResult);
         }
+        /// <summary>
+        /// Passing Same Data Result Bad request Exception 
+        /// </summary>
         [Fact]
         public void GivenSameForParkedVehicleDataPasses_BadRequestResult_Exception()
         {
             var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
-            var result = new ParkingInformation
+            var result = new Information
             {
-                VehicalNo = "MH 07 BT 1895",
+                VehicalNumber = "MH 07 BT 1895",
                 VehicalBrand = "BMW",
                 VehicalColor = "Black",
                 ParkingType = "Owner"
@@ -178,13 +204,16 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        /// <summary>
+        /// Given Incorrect Vehicle Number passes bad request Exception
+        /// </summary>
         [Fact]
         public void GivenWrongParkedVehicleNumberPasses_BadRequestResult_Exception()
         {
             var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
-            var result = new ParkingInformation
+            var result = new Information
             {
-                VehicalNo = "MH 07",
+                VehicalNumber = "MH 07",
                 VehicalBrand = "BMW",
                 VehicalColor = "Black",
                 ParkingType = "Owner"
