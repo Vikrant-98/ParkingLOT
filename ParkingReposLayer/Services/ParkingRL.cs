@@ -119,7 +119,7 @@ namespace ParkingReposLayer.Services
                     Entries.ParkingSlotNo = 0;
                     Entries.ExitTime = DateTime.Now;
                     double timeDiff = Entries.ExitTime.Subtract(Entries.EntryTime).TotalHours;
-                    Entries.ChargePerHr = timeDiff * 10;
+                    Entries.ChargePerHr = timeDiff * 8;
                     Entries.ParkStatus = false;
                     dBContext.SaveChanges();
                     return true;
