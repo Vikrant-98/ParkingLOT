@@ -11,7 +11,7 @@ namespace ParkingBusinesLayer.Interface
     public interface IParkingBL
     {
 
-        bool ParkVehicle(ParkingInformation Info);
+        bool ParkVehicle(Information Info);
 
         bool UnparkVehicle(Unpark Info);
 

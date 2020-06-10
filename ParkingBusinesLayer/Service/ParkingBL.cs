@@ -22,7 +22,7 @@ namespace ParkingBusinesLayer.Service
         /// </summary>
         /// <param name="Info"></param>
         /// <returns></returns>
-        public bool ParkVehicle(ParkingInformation Info)
+        public bool ParkVehicle(Information Info)
         {
             try
             {
