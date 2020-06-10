@@ -22,9 +22,9 @@ namespace ParkingCommonLayer.Services
 
         public string VehicalColor { get; set; } 
 
-        public int ChargePerHr { get; set; } 
+        public double ChargePerHr { get; set; } 
 
-        public DateTime EntryTime { get; set; } = DateTime.Now;
+        public DateTime EntryTime { get; set; } 
 
         public DateTime ExitTime { get; set; }
 
