@@ -9,7 +9,7 @@ namespace ParkingReposLayer.Interface
     /// </summary>
     public interface IParkingRL
     {
-        bool ParkVehicle(ParkingInformation Info);
+        bool ParkVehicle(Information Info);
 
         bool UnparkVehicle(Unpark Info);
 

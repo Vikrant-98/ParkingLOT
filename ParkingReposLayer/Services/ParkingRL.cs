@@ -24,23 +24,36 @@ namespace ParkingReposLayer.Services
         /// </summary>
         /// <param name="Info"></param>
         /// <returns></returns>
-        public bool ParkVehicle(ParkingInformation Info)
+        public bool ParkVehicle(Information Info)
         {
             try
             {
                 bool parkingtype = Enum.TryParse<Parkingtype>(Info.ParkingType, true, out Parkingtype Parkingtype);
 
-                string VehicalNo = Info.VehicalNo;
-                var Validation = dBContext.Entities.Where(u => u.VehicalNo == VehicalNo).FirstOrDefault();
-
-                Info.ParkingSlotNo = AllotcateSlot();
-
+                string VehicalNo = Info.VehicalNumber;
+                var Validation = dBContext.ParkingInfo.Where(u => u.VehicalNo == Info.VehicalNumber).FirstOrDefault();
+                
                 if (Validation != null)
                 {
                     throw new Exception("User Already Exist ");                     //throw exception when user exist
                 }
-                Info.ParkStatus = true;
-                var Result = dBContext.Entities.Add(Info);
+                int ParkingSlotNo = AllotcateSlot();
+                if (ParkingSlotNo == 0)
+                {
+                    throw new Exception("Parking is Full ");
+                }
+                ParkingInformation data = new ParkingInformation
+                {
+                    EntryTime = DateTime.Now,
+                    VehicalNo = Info.VehicalNumber,
+                    VehicalBrand = Info.VehicalBrand,
+                    VehicalColor = Info.VehicalColor,
+                    ParkingType = Info.ParkingType,
+                    ParkingSlotNo = ParkingSlotNo,
+                    ParkStatus = true
+                };
+                
+                var Result = dBContext.ParkingInfo.Add(data);
                
                 if (Result != null)
                 {
@@ -64,18 +77,22 @@ namespace ParkingReposLayer.Services
         public int AllotcateSlot()
         {
             int slot = 1;
-            
-            bool flag = true;
-            while (flag != false)
+            int count = 0;
+            bool flag = false;
+            while (flag != true || count != 100)
             {
                 slot = (random.Next() % 100) + 1;
-                var result = dBContext.Entities.Where(u => u.ParkingSlotNo == slot).FirstOrDefault();
+                var result = dBContext.ParkingInfo.Where(u => u.ParkingSlotNo == slot).FirstOrDefault();
                 if (result == null)
                 {
-                    flag = false;                     
+                    flag = true;                     
                 }
+                count++;
             }
-            return slot;
+            if (count < 101)
+                return slot;
+            else
+                return 0;
         }
         /// <summary>
         /// Unpark the vehicle 
@@ -88,23 +105,22 @@ namespace ParkingReposLayer.Services
         {
             try
             {
-                var Entries = (from x in dBContext.Entities
+                var Entries = (from x in dBContext.ParkingInfo
                                where x.VehicalNo == Info.VehicalNo
                                select x).First();
 
                 if (Entries.ParkStatus == false)
                 {
-                    throw new Exception("Car is Unparked Already");
+                    throw new Exception("Unparked Already");
                 }
 
                 if (Entries != null)
                 {
                     Entries.ParkingSlotNo = 0;
                     Entries.ExitTime = DateTime.Now;
-                    int timeDiff = Entries.ExitTime.Subtract(Entries.EntryTime).Hours;
+                    double timeDiff = Entries.ExitTime.Subtract(Entries.EntryTime).TotalHours;
                     Entries.ChargePerHr = timeDiff * 10;
-                    Entries.ParkStatus = false
-                        ;
+                    Entries.ParkStatus = false;
                     dBContext.SaveChanges();
                     return true;
                 }
@@ -124,7 +140,7 @@ namespace ParkingReposLayer.Services
         /// <returns></returns>
         public List<ParkingInformation> GetAllParkingData()
         {
-            var allEntries = dBContext.Entities.ToList();
+            var allEntries = dBContext.ParkingInfo.ToList();
 
             return allEntries;
         }
@@ -134,7 +150,7 @@ namespace ParkingReposLayer.Services
         /// <returns></returns>
         public List<ParkingInformation> GetAllParkData()
         {
-            var allEntries = dBContext.Entities.Where(x => x.ParkStatus == true).ToList();
+            var allEntries = dBContext.ParkingInfo.Where(x => x.ParkStatus == true).ToList();
 
             return allEntries;
         }
@@ -144,7 +160,7 @@ namespace ParkingReposLayer.Services
         /// <returns></returns>
         public List<ParkingInformation> GetAllUnParkData()
         {
-            var allEntries = dBContext.Entities.Where(x => x.ParkStatus == false).ToList();
+            var allEntries = dBContext.ParkingInfo.Where(x => x.ParkStatus == false).ToList();
 
             return allEntries;
         }
@@ -157,11 +173,11 @@ namespace ParkingReposLayer.Services
         {
             try
             {
-                var details = dBContext.Entities.First(x => x.ParkingID == ReceiptNumber);
+                var details = dBContext.ParkingInfo.First(x => x.ParkingID == ReceiptNumber);
 
                 if (details != null)
                 {
-                    dBContext.Entities.Remove(details);
+                    dBContext.ParkingInfo.Remove(details);
 
                     dBContext.SaveChanges();
                     return details;
@@ -188,19 +204,18 @@ namespace ParkingReposLayer.Services
             try
             {
                 string VehicalNo = Info.VehicalNumber;
-                var Validation = dBContext.Entities.Where(u => u.VehicalNo == VehicalNo && u.ParkingID != ID).FirstOrDefault();
+                var Validation = dBContext.ParkingInfo.Where(u => u.VehicalNo == VehicalNo && u.ParkingID != ID).FirstOrDefault();
 
                 if (Validation != null)
                 {
                     throw new Exception("User Already Exist ");                     
                 }
 
-                var Entries = (from x in dBContext.Entities
+                var Entries = (from x in dBContext.ParkingInfo
                                where x.ParkingID == ID
                                select x).First();
                 if (Entries != null)
                 {
-                    Entries.ParkingSlotNo = Info.ParkingSlotNo;
                     Entries.ParkingType = Info.ParkingType;
                     Entries.VehicalBrand = Info.VehicalBrand;
                     Entries.VehicalNo = Info.VehicalNumber;
@@ -229,9 +244,9 @@ namespace ParkingReposLayer.Services
             detail.VehicalNo = VehicleNo;
             try
             {
-                if (dBContext.Entities.Any(x => x.VehicalNo == VehicleNo))
+                if (dBContext.ParkingInfo.Any(x => x.VehicalNo == VehicleNo))
                 {
-                    return (from Details in dBContext.Entities
+                    return (from Details in dBContext.ParkingInfo
                             where Details.VehicalNo == VehicleNo
                             select Details).ToList();
                 }
@@ -255,10 +270,10 @@ namespace ParkingReposLayer.Services
         {
             try
             {
-                if (dBContext.Entities.Any(x => x.VehicalBrand == brand))
+                if (dBContext.ParkingInfo.Any(x => x.VehicalBrand == brand))
                 {
 
-                    var VehicleData = (from Details in dBContext.Entities
+                    var VehicleData = (from Details in dBContext.ParkingInfo
                                        where Details.VehicalBrand == brand
                                        select Details).ToList();
 

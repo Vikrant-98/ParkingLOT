@@ -22,7 +22,7 @@ namespace ParkingReposLayer.Services
         /// </summary>
         /// <param name="Info"></param>
         /// <returns></returns>
-        public bool AddUser(ParkingUser Info)
+        public bool AddUser(Users Info)
         {
             try
             {
@@ -39,8 +39,15 @@ namespace ParkingReposLayer.Services
                 {
                     throw new Exception("User Already Exist ");                     //throw exception when user exist
                 }
-
-                var Result = dBContext.Users.Add(Info);
+                ParkingUser data = new ParkingUser
+                {
+                    FirstName = Info.FirstName,
+                    LastName = Info.LastName,
+                    MailID = Info.MailID,
+                    DriverCategory = Info.DriverCategory,
+                    Password = Info.Password
+                };
+                var Result = dBContext.Users.Add(data);
                 dBContext.SaveChanges();
                 if (Result != null)
                 {

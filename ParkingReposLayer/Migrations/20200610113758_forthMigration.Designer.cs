@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkingReposLayer.ApplicationDB;
 
 namespace ParkingReposLayer.Migrations
 {
     [DbContext(typeof(Application))]
-    partial class ApplicationModelSnapshot : ModelSnapshot
+    [Migration("20200610113758_forthMigration")]
+    partial class forthMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,7 @@ namespace ParkingReposLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("ChargePerHr");
+                    b.Property<int>("ChargePerHr");
 
                     b.Property<DateTime>("EntryTime");
 

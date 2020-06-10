@@ -8,7 +8,7 @@ namespace ParkingReposLayer.Interface
     public interface IUserRL
     {
         //Registration
-        bool AddUser(ParkingUser Info);
+        bool AddUser(Users Info);
         //Login
         bool LoginVerification(Login Info);
 
