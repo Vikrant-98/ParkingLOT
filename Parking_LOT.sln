@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkingReposLayer", "Parkin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkingBusinesLayer", "ParkingBusinesLayer\ParkingBusinesLayer.csproj", "{7A5D774F-27E6-49FD-AE56-3EF45955311A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestforParkingLOT", "XUnitTestforParkingLOT\XUnitTestforParkingLOT.csproj", "{FC846E4A-9F9E-4879-BC67-F1A1E9916DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestforParkingLOT", "XUnitTestforParkingLOT\XUnitTestforParkingLOT.csproj", "{FC846E4A-9F9E-4879-BC67-F1A1E9916DF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageListner", "MessageListner\MessageListner.csproj", "{7A4CE814-67EA-4FBD-BEFA-BC0AE652CE94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{FC846E4A-9F9E-4879-BC67-F1A1E9916DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC846E4A-9F9E-4879-BC67-F1A1E9916DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC846E4A-9F9E-4879-BC67-F1A1E9916DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A4CE814-67EA-4FBD-BEFA-BC0AE652CE94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A4CE814-67EA-4FBD-BEFA-BC0AE652CE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A4CE814-67EA-4FBD-BEFA-BC0AE652CE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A4CE814-67EA-4FBD-BEFA-BC0AE652CE94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
