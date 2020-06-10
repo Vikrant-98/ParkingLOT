@@ -35,7 +35,7 @@ namespace Parking_LOT.Controllers
         /// <returns></returns>
         [Route("ParkVehicle")]
         [HttpPost]
-        public IActionResult ParkVehicle([FromBody]ParkingInformation Info)
+        public IActionResult ParkVehicle([FromBody]Information Info)
         {
             try
             {

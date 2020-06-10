@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using MailKit.Net.Smtp;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
@@ -42,7 +42,7 @@ namespace Parking_LOT.Controllers
        /// <returns></returns>
         [Route("Register")]
         [HttpPost]
-        public IActionResult RegisterUser([FromBody]ParkingUser Info)
+        public IActionResult RegisterUser([FromBody]Users Info)
         {
             try
             {
@@ -52,18 +52,19 @@ namespace Parking_LOT.Controllers
                 {
                     var status = true;
                     var Message = "Register Successfull";
-                    string messagesender = "Registration successful with" + "\n Email : " + Convert.ToString(Info.MailID) + "\n and" + "\n Password : " + Convert.ToString(Info.Password) + "\n of User type : " + Info.DriverCategory;
+                    RegistrationResponse responseData = new RegistrationResponse
+                    {
+                       FirstName = Info.FirstName,
+                       LastName = Info.LastName,
+                       MailID = Info.MailID,
+                       DriverCategory = Info.DriverCategory
+                    };
+                    string messagesender = "Registration successful with" + "\n Email : " + Convert.ToString(Info.MailID) + "\n and" + "\n Password : " + Convert.ToString(password) + "\n of User type : " + Info.DriverCategory;
                     msmqSender.Message(messagesender);
                     return Ok(new {
                         status,
                         Message,
-                        Info.ID,
-                        Info.FirstName,
-                        Info.LastName,
-                        Info.MailID,
-                        Info.DriverCategory,
-                        Info.CreateDate,
-                        Info.ModifiedDate
+                        responseData
                     });                                                             //data return indexer SMD format when Register success
                     
                 }
@@ -112,28 +113,13 @@ namespace Parking_LOT.Controllers
             try
             {
                 bool data = _BusinessLayer.LoginVerification(Info);                 //data return indexer SMD format
-                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Role, Info.DriverCategory.ToString()),
-                    new Claim("MailID", Info.MailID.ToString()),
-                    new Claim("Password", Info.Password.ToString())
-                };
-                var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
-                     _configuration["Jwt:Issuer"],
-                     claims,
-                     expires: DateTime.Now.AddHours(1),
-                     signingCredentials: signingCreds);                                   //Token Generate for User Category
-                
+                var jsontoken = GenerateToken(Info);
                 if (data == true)
                 {
                     LoginResponse responseData = new LoginResponse
                     {
                         mail = Info.MailID,
-                        token = new JwtSecurityTokenHandler().WriteToken(token)
+                        token = jsontoken
                     };
                     var status = true;
                     var Message = "Login successful ";
@@ -152,6 +138,37 @@ namespace Parking_LOT.Controllers
                 var status = false;
                 var Message = "Login Failed";
                 return BadRequest(new { status , error = e.Message , Message });
+            }
+        }
+        /// <summary>
+        /// Generates Token for Login
+        /// </summary>
+        /// <param name="responseData"></param>
+        /// <returns></returns>
+        private string GenerateToken(Login Info)
+        {
+            try
+            {
+                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Role, Info.DriverCategory.ToString()),
+                    new Claim("MailID", Info.MailID.ToString()),
+                    new Claim("Password", Info.Password.ToString())
+                };
+                var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+                    _configuration["Jwt:Issuer"],
+                    claims,
+                    expires: DateTime.Now.AddHours(1),
+                    signingCredentials: signingCreds);
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
         /// <summary>
