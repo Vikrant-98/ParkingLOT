@@ -8,6 +8,7 @@ using ParkingCommonLayer.Services;
 using ParkingReposLayer.ApplicationDB;
 using ParkingReposLayer.Interface;
 using ParkingReposLayer.Services;
+using System.Collections.Generic;
 using System;
 using Xunit;
 
@@ -133,6 +134,22 @@ namespace XUnitTestforParkingLOT
 
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
+        [Fact]
+        public void Given_Existing_EMailDataFormatPass__BadRequestResult_Exception()
+        {
+            var controller = new UserController(_businessLayeruser, _configuration, dBContext);
+            var result = new Users
+            {
+                FirstName = "Suraj",
+                LastName = "Rajput",
+                MailID = "surajrajput@gmail.com",
+                DriverCategory = "Panda",
+                Password = "Vikrant1234"
+            };
+            var okResult = controller.RegisterUser(result);
+
+            Assert.IsType<BadRequestObjectResult>(okResult);
+        }
         /// <summary>
         /// Same Data Passing Bad request Exception 
         /// </summary>
@@ -153,16 +170,69 @@ namespace XUnitTestforParkingLOT
             Assert.IsType<BadRequestObjectResult>(okResult);
         }
         /// <summary>
+        /// Wrong Delete Data Passing Bad request Exception 
+        /// </summary>
+        [Fact]
+        public void GivenWrongDeletedetails_BadRequestResult_Exception()
+        {
+            var controller = new UserController(_businessLayeruser, _configuration, dBContext);
+            int ReceiptNumber = 50;
+            var okResult = controller.DeleteUserDetails(ReceiptNumber);
+
+            Assert.IsType<BadRequestObjectResult>(okResult);
+        }
+        /// <summary>
+        /// Correct Update Data Passing Ok Resopnce 
+        /// </summary>
+        [Fact]
+        public void GivenCorrectUpdatedetails_Passing_Ok_Resopnce()
+        {
+            var controller = new UserController(_businessLayeruser, _configuration, dBContext);
+            int ReceiptNumber = 20;
+            Users Info = new Users
+            {
+                MailID = "meenakshichitte@gmail.com",
+                FirstName = "Meenakshi",
+                LastName ="Chitte",
+                DriverCategory ="Owner",
+                Password ="meenakshi1234"
+            };
+            var okResult = controller.UpdateUserRecord(Info, ReceiptNumber);
+
+            Assert.IsType<OkObjectResult>(okResult);
+        }
+        /// <summary>
+        /// Invalid Update Data Passing Bad request Exception 
+        /// </summary>
+        [Fact]
+        public void GivenInvalidUpdatedetails_Passing_Bad_request_Exception()
+        {
+            var controller = new UserController(_businessLayeruser, _configuration, dBContext);
+            int ReceiptNumber = 50;
+            Users Info = new Users
+            {
+                MailID = "meenakshichitte@gmail.com",
+                FirstName = "Meenakshi",
+                LastName = "Chitte",
+                DriverCategory = "Owner",
+                Password = "meenakshi1234"
+            };
+            var okResult = controller.UpdateUserRecord(Info, ReceiptNumber);
+
+            Assert.IsType<BadRequestObjectResult>(okResult);
+        }
+        /// <summary>
         /// Given wrong Email address and password Exception
         /// </summary>
         [Fact]
-        public void GivenInvalidValid_EmailandPassword_Passes_BadRequestResult_Exception()
+        public void GivenInvalid_DriverType_Passes_BadRequestResult_Exception()
         {
-            var controller = new UserController(_businessLayeruser, _configuration,dBContext);
+            var controller = new UserController(_businessLayeruser, _configuration, dBContext);
             var result = new Login
             {
-                MailID = "vishalchitte@gmail.com",
-                Password = "vishal@1234"
+                MailID = "vishal@gmail.com",
+                Password = "vishal@1234",
+                DriverCategory = "vwxyz"
             };
             var okResult = controller.LoginUser(result);
 
@@ -177,8 +247,8 @@ namespace XUnitTestforParkingLOT
             var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
             var result = new Information
             {
-                VehicalNumber ="MH 15 YD 8951",
-                VehicalBrand="BMW",
+                VehicalNumber ="MH 15 ES 1234",
+                VehicalBrand="Toyota",
                 VehicalColor="White",
                 ParkingType="Vallet"
             };
@@ -221,6 +291,40 @@ namespace XUnitTestforParkingLOT
             var okResult = controller.ParkVehicle(result);
 
             Assert.IsType<BadRequestObjectResult>(okResult);
+        }
+         /// <summary>
+         /// Given Incorrect Parking type passes bad request Exception
+         /// </summary>
+        [Fact]
+        public void GivenWrongParkedTypePasses_BadRequestResult_Exception()
+        {
+            var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
+            var result = new Information
+            {
+                VehicalNumber = "MH 17 QW 5162",
+                VehicalBrand = "Toyata",
+                VehicalColor = "Black",
+                ParkingType = "abcd"
+            };
+            var okResult = controller.ParkVehicle(result);
+
+            Assert.IsType<BadRequestObjectResult>(okResult);
+        }
+        /// <summary>
+        /// Given all parking Details return Ok result
+        /// </summary>
+        [Fact]
+        public void GetALLParkingDetailsPasses_OkResult()
+        {
+            var controller = new ParkingController(_businessLayerparking, _configuration, dBContext);
+            
+            var okResult1 = controller.GetAllParkingData();
+            var okResult2 = controller.GetAllParkVehicleData();
+            var okResult3 = controller.GetAllUnParkVehicleData();
+
+            Assert.IsType<OkObjectResult>(okResult1);
+            Assert.IsType<OkObjectResult>(okResult2);
+            Assert.IsType<OkObjectResult>(okResult3);
         }
     }
 }
