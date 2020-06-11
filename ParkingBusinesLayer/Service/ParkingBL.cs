@@ -69,28 +69,56 @@ namespace ParkingBusinesLayer.Service
         /// Return list for Parking details
         /// </summary>
         /// <returns></returns>
-        public List<ParkingInformation> GetAllParkingData()
+        public object GetAllParkingData()
         {
-            //Return Get all Details
-            return Parking.GetAllParkingData();
+            try
+            {
+                //Return Get all Details
+                return Parking.GetAllParkingData();
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
         /// <summary>
         /// Return list for Parking details
         /// </summary>
         /// <returns></returns>
-        public List<ParkingInformation> GetAllParkData()
+        public object GetAllParkedData()
         {
-            //Return Get all Details
-            return Parking.GetAllParkData();
+            
+            try
+            {
+                //Return Get all Details
+                return Parking.GetAllParkedData();
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
         }
         /// <summary>
         /// Return list for Parking details
         /// </summary>
         /// <returns></returns>
-        public List<ParkingInformation> GetAllUnParkData()
+        public object GetAllUnParkedData()
         {
-            //Return Get all Details
-            return Parking.GetAllUnParkData();
+            try
+            {
+                //Return Get all Details
+                return Parking.GetAllUnParkedData();
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
         /// <summary>
         /// Delete Parking Details
