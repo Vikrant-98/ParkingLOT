@@ -51,13 +51,13 @@ namespace Parking_LOT.Controllers
                 {
                     var status = false;
                     var Message = "Parking Failed";
-                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                    return BadRequest(new { status, Message });                             //SMD for Login Fails
                 }
             }
             catch (Exception e)
             {
                 var status = false;
-                var Message = "Login Failed";
+                var Message = "Parking Failed";
                 return BadRequest(new { status, error = e.Message, Message });
             }
         }
@@ -101,12 +101,30 @@ namespace Parking_LOT.Controllers
         [Route("ParkingDetails")]
         [HttpGet]
         [Authorize(Roles = "Owner,Police")]
-        public ActionResult<List<ParkingInformation>> GetAllParkingData()
-        {
-            bool success = true;
-            string message = "ALL Records of Parking ";
-            var data = _BusinessLayer.GetAllParkingData();
-            return Ok(new { success, message, data });                                   //SMD for All Details
+        public ActionResult GetAllParkingData()
+        {                                    
+            try
+            {
+                var data = _BusinessLayer.GetAllParkingData();                                  //SMD for All Details
+                if (data != null)
+                {
+                    bool status = true;
+                    string message = "ALL Records of Parking ";
+                    return Ok(new { status, message, data });                                   //SMD for All Details
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
         }
         /// <summary>
         /// Get All details
@@ -115,12 +133,31 @@ namespace Parking_LOT.Controllers
         [Route("parkDetails")]
         [HttpGet]
         [Authorize(Roles = "Owner,Police")]
-        public ActionResult<List<ParkingInformation>> GetAllParkData()
+        public ActionResult GetAllParkVehicleData()
         {
-            bool success = true;
-            string message = "ALL Records of UnPark Vehicle ";
-            var data = _BusinessLayer.GetAllParkData();
-            return Ok(new { success, message, data });                                   //SMD for All Details
+            try
+            {
+                var data = _BusinessLayer.GetAllParkedData();
+                if (data != null)
+                {
+                    bool status = true;
+                    string message = "ALL Records of Park Vehicle ";
+                    return Ok(new { status, message, data });                                   //SMD for All Details
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
+
         }
         /// <summary>
         /// Get All details
@@ -129,12 +166,30 @@ namespace Parking_LOT.Controllers
         [Route("UnparkDetails")]
         [HttpGet]
         [Authorize(Roles = "Owner,Police")]
-        public ActionResult<List<ParkingInformation>> GetAllUnParkData()
+        public ActionResult GetAllUnParkVehicleData()
         {
-            bool success = true;
-            string message = "ALL Records of UnPark Vehicle ";
-            var data = _BusinessLayer.GetAllUnParkData();
-            return Ok(new { success, message, data });                                   //SMD for All Details
+            try
+            {
+                var data = _BusinessLayer.GetAllUnParkedData();                                  //SMD for All Details
+                if (data != null)
+                {
+                    bool status = true;
+                    string message = "ALL Records of UnPark Vehicle ";
+                    return Ok(new { status, message, data });                                     //SMD for All Details
+                }
+                else
+                {
+                    var status = false;
+                    var Message = "Failed";
+                    return BadRequest(new { status, Message });                             //SMD for Ligin Fails
+                }
+            }
+            catch (Exception e)
+            {
+                var status = false;
+                var Message = "Failed";
+                return BadRequest(new { status, error = e.Message, Message });
+            }
         }
         /// <summary>
         /// Delete Record for Vehicle

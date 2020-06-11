@@ -1,6 +1,4 @@
 ﻿using Experimental.System.Messaging;
-using MailKit.Net.Smtp;
-using MimeKit;
 
 namespace Parking_LOT.MSMQService
 {
@@ -22,11 +20,13 @@ namespace Parking_LOT.MSMQService
             {
                 MyQueue = MessageQueue.Create(@".\Private$\myqueue");
             }
-            Message MyMessage = new Message();
-            MyMessage.Formatter = new BinaryMessageFormatter();
-            MyMessage.Body = emailMessage;
-            MyMessage.Label = "Registration";
-            MyMessage.Priority = Experimental.System.Messaging.MessagePriority.Normal;
+            Message MyMessage = new Message
+            {
+                Formatter = new BinaryMessageFormatter(),
+                Body = emailMessage,
+                Label = "Registration",
+                Priority = MessagePriority.Normal
+            };
             MyQueue.Send(MyMessage);
         }
     }
