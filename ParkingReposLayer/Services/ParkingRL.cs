@@ -29,7 +29,10 @@ namespace ParkingReposLayer.Services
             try
             {
                 bool parkingtype = Enum.TryParse<Parkingtype>(Info.ParkingType, true, out Parkingtype Parkingtype);
-
+                if (parkingtype != true)
+                {
+                    throw new Exception("Invalid Parking Type");
+                }
                 string VehicalNo = Info.VehicalNumber;
                 var Validation = dBContext.ParkingInfo.Where(u => u.VehicalNo == Info.VehicalNumber).FirstOrDefault();
                 
@@ -135,34 +138,61 @@ namespace ParkingReposLayer.Services
             }
         }
         /// <summary>
-        /// Giving the All in form pf list
+        /// Giving the All Parking Details in form of list
         /// </summary>
         /// <returns></returns>
-        public List<ParkingInformation> GetAllParkingData()
+        public object GetAllParkingData()
         {
-            var allEntries = dBContext.ParkingInfo.ToList();
+            try
+            {
+                var allEntries = dBContext.ParkingInfo;
 
-            return allEntries;
+                return allEntries;
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+           
         }
         /// <summary>
-        /// Giving the All in form pf list
+        /// Giving the All Parked Details in form of list
         /// </summary>
         /// <returns></returns>
-        public List<ParkingInformation> GetAllParkData()
+        public object GetAllParkedData()
         {
-            var allEntries = dBContext.ParkingInfo.Where(x => x.ParkStatus == true).ToList();
+            try
+            {
+                var allEntries = dBContext.ParkingInfo.Where(x => x.ParkStatus == true);
 
-            return allEntries;
+                return allEntries;
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
         /// <summary>
-        /// Giving the All in form pf list
+        /// Giving the All UnParked Details in form of list
         /// </summary>
         /// <returns></returns>
-        public List<ParkingInformation> GetAllUnParkData()
+        public object GetAllUnParkedData()
         {
-            var allEntries = dBContext.ParkingInfo.Where(x => x.ParkStatus == false).ToList();
+            try
+            {
+                var allEntries = dBContext.ParkingInfo.Where(x => x.ParkStatus == false);
 
-            return allEntries;
+                return allEntries;
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
         /// <summary>
         /// Deleted Parking Details

@@ -13,11 +13,11 @@ namespace ParkingReposLayer.Interface
 
         bool UnparkVehicle(Unpark Info);
 
-        List<ParkingInformation> GetAllParkingData();
+        object GetAllParkingData();
 
-        List<ParkingInformation> GetAllParkData();
+        object GetAllParkedData();
 
-        List<ParkingInformation> GetAllUnParkData();
+        object GetAllUnParkedData();
 
         object DeleteCarParkingDetails(int ReceiptNumber);
 
